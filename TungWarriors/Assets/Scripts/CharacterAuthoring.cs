@@ -19,9 +19,20 @@ public struct CharacterMoveSpeed : IComponentData
     public float Value;
 }
 
+
+public struct CharacterMaxHitPoints : IComponentData
+{
+    public int Value;
+}
+
+public struct CharacterCurrentHitPoints : IComponentData
+{
+    public int Value;
+}
 public class CharacterAuthoring : MonoBehaviour
 {
     public float MoveSpeed;
+    public int HitPoints;
     private class Baker : Baker<CharacterAuthoring>
     {
         public override void Bake(CharacterAuthoring authoring)
@@ -33,6 +44,8 @@ public class CharacterAuthoring : MonoBehaviour
             {
                 Value = authoring.MoveSpeed
             });
+            AddComponent(entity, new CharacterMaxHitPoints { Value = authoring.HitPoints });
+            AddComponent(entity, new CharacterCurrentHitPoints { Value = authoring.HitPoints });
         }
     }
 }
