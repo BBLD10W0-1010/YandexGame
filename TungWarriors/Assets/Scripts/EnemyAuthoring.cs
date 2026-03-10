@@ -4,17 +4,37 @@ using Unity.Transforms;
 using UnityEngine.Rendering;
 using Unity.Mathematics;
 using Unity.Burst;
-
+using System.Reflection;
+using Unity.Physics;
+using Unity.Collections;
+using Unity.Physics.Systems;
 public struct EnemyTag : IComponentData { }
+
+public struct EnemyAttackData : IComponentData
+{
+    public int HitPoints;
+    public float CooldownTime;
+}
+
+public struct EnemyCooldownExpirationTimestamp : IComponentData, IEnableableComponent
+{
+    public double value;
+}
+
 [RequireComponent(typeof(CharacterAuthoring))]
 public partial class EnemyAuthoring : MonoBehaviour
 {
+    public int attackDamage;
+    public float attackCooldownTime;
    private class Baker : Baker<EnemyAuthoring>
     {
         public override void Bake(EnemyAuthoring enemyAuthoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent<EnemyTag>(entity);
+            AddComponent(entity, new EnemyAttackData() { CooldownTime = enemyAuthoring.attackCooldownTime, HitPoints = enemyAuthoring.attackDamage });
+            AddComponent<EnemyCooldownExpirationTimestamp>(entity);
+            SetComponentEnabled<EnemyCooldownExpirationTimestamp>(entity, false);
         }
 
         
@@ -47,6 +67,79 @@ public partial class EnemyAuthoring : MonoBehaviour
         {
             var vectorToPlayer = playerPosition - localTransform.Position.xy;
             characterMoveDirection.Value = math.normalize(vectorToPlayer);
+        }
+    }
+    [UpdateInGroup(typeof(PhysicsSystemGroup))]
+    [UpdateAfter(typeof(PhysicsSimulationGroup))]
+    [UpdateBefore(typeof(AfterPhysicsSystemGroup))]
+    public partial struct EnemyAttackSystem : ISystem
+    { 
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<SimulationSingleton>();
+        }
+        [BurstCompile]
+        public void OnUpdate(ref SystemState state)
+        {
+            var elapsedTime = SystemAPI.Time.ElapsedTime;
+            foreach(var (expirationTimeStamp, cooldownEnadled) in SystemAPI.Query<EnemyCooldownExpirationTimestamp, EnabledRefRW<EnemyCooldownExpirationTimestamp>>())
+            {
+                if (expirationTimeStamp.value > elapsedTime) continue;
+                cooldownEnadled.ValueRW = false;
+            }
+
+            var attackJob = new EnemyAttackJob
+            {
+                PlayerLookup = SystemAPI.GetComponentLookup<PlayerTag>(true),
+                AttackDataLookup = SystemAPI.GetComponentLookup<EnemyAttackData>(true),
+                CooldownLookup = SystemAPI.GetComponentLookup<EnemyCooldownExpirationTimestamp>(),
+                DamageBufferLookup = SystemAPI.GetBufferLookup<DamageThisFrame>(),
+                ElapsedTime = elapsedTime
+            };
+
+            var simulationSingleton = SystemAPI.GetSingleton<SimulationSingleton>();
+            state.Dependency = attackJob.Schedule(simulationSingleton, state.Dependency);
+        }
+    }
+
+    [BurstCompile]
+    public struct EnemyAttackJob : ICollisionEventsJob
+    {
+        [ReadOnly] public ComponentLookup<PlayerTag> PlayerLookup;
+        [ReadOnly] public ComponentLookup<EnemyAttackData> AttackDataLookup;
+        public ComponentLookup<EnemyCooldownExpirationTimestamp> CooldownLookup;
+        public BufferLookup<DamageThisFrame> DamageBufferLookup;
+        public double ElapsedTime;
+        public void Execute(CollisionEvent collisionEvent)
+        {
+            Entity playerEntity;
+            Entity enemyEntity;
+
+            if(PlayerLookup.HasComponent(collisionEvent.EntityA) && AttackDataLookup.HasComponent(collisionEvent.EntityB))
+            {
+                playerEntity = collisionEvent.EntityA;
+                enemyEntity = collisionEvent.EntityB;
+            }
+            else if (PlayerLookup.HasComponent(collisionEvent.EntityB) && AttackDataLookup.HasComponent(collisionEvent.EntityA))
+            {
+                playerEntity = collisionEvent.EntityB;
+                enemyEntity = collisionEvent.EntityA;
+            }
+            else
+            {
+                return;
+            }
+
+            if (CooldownLookup.IsComponentEnabled(enemyEntity))
+            {
+                return;
+            }
+            var attackData = AttackDataLookup[enemyEntity];
+            CooldownLookup[enemyEntity] = new EnemyCooldownExpirationTimestamp { value = ElapsedTime + attackData.CooldownTime };
+            CooldownLookup.SetComponentEnabled(enemyEntity, true);
+
+            var playerDamageBuffer = DamageBufferLookup[playerEntity];
+            playerDamageBuffer.Add(new DamageThisFrame { Value = attackData.HitPoints });
         }
     }
 }

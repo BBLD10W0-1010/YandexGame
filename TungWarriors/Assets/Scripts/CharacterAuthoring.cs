@@ -29,6 +29,11 @@ public struct CharacterCurrentHitPoints : IComponentData
 {
     public int Value;
 }
+
+public struct DamageThisFrame: IBufferElementData
+{
+    public int Value;
+}
 public class CharacterAuthoring : MonoBehaviour
 {
     public float MoveSpeed;
@@ -46,6 +51,7 @@ public class CharacterAuthoring : MonoBehaviour
             });
             AddComponent(entity, new CharacterMaxHitPoints { Value = authoring.HitPoints });
             AddComponent(entity, new CharacterCurrentHitPoints { Value = authoring.HitPoints });
+            AddBuffer<DamageThisFrame>(entity);
         }
     }
 }
@@ -72,6 +78,23 @@ public partial struct CharacterMoveSystem : ISystem
         {
             var moveStep2d = direction.Value * speed.Value;
             velocity.ValueRW.Linear = new float3(moveStep2d, 0f);
+        }
+    }
+}
+
+public partial struct ProcessDamageThisFrameSystem : ISystem
+{
+    [BurstCompile]
+    public void OnUpdate(ref SystemState state)
+    {
+        foreach (var (hitpoints, damageThisFrame) in SystemAPI.Query<RefRW<CharacterCurrentHitPoints>, DynamicBuffer<DamageThisFrame>>())
+        {
+            if (damageThisFrame.IsEmpty) continue;
+            foreach (var damage in damageThisFrame)
+            {
+                hitpoints.ValueRW.Value -= damage.Value;
+            }
+            damageThisFrame.Clear();
         }
     }
 }
