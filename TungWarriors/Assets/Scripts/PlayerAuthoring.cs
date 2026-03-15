@@ -60,7 +60,7 @@ public partial struct MoveCameraSystem : ISystem
     {
         foreach (var (entity,cameraTarget) in SystemAPI.Query<LocalToWorld, CameraTarget>().WithAll<PlayerTag>().WithNone<InitializeCameraTargetTag>())
         {
-            cameraTarget.CameraTransform.Value.position = entity.Position;
+            cameraTarget.CameraTransform.Value.position = new Vector3(entity.Position.x, entity.Position.y, -10f);
         }
     }
 }

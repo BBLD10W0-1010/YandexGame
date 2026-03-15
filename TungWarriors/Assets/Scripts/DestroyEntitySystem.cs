@@ -21,6 +21,10 @@ public partial struct DestroyEntitySystem : ISystem
         var endECB = entityCommandBuffer.CreateCommandBuffer(state.WorldUnmanaged);
         foreach (var (_empt,entity) in SystemAPI.Query<DestroyEntityFlag>().WithEntityAccess())
         {
+            if (SystemAPI.HasComponent<PlayerTag>(entity))
+            {
+                GameUIController.Instance.ShowGameOverUI();
+            }
             endECB.DestroyEntity(entity);
         }
     }
