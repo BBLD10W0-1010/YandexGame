@@ -1,4 +1,4 @@
-using Unity.Entities;
+﻿using Unity.Entities;
 using UnityEngine;
 using Unity.Mathematics;
 using UnityEngine.Rendering;
@@ -91,13 +91,13 @@ public partial struct ProcessDamageThisFrameSystem : ISystem
     {
         foreach (var (hitpoints, damageThisFrame,entity) in SystemAPI.Query<RefRW<CharacterCurrentHitPoints>, DynamicBuffer<DamageThisFrame>>().WithPresent<DestroyEntityFlag>().WithEntityAccess())
         {
+            
             if (damageThisFrame.IsEmpty) continue;
             foreach (var damage in damageThisFrame)
             {
                 hitpoints.ValueRW.Value -= damage.Value;
             }
             damageThisFrame.Clear();
-
             if (hitpoints.ValueRO.Value <= 0)
             {
                 SystemAPI.SetComponentEnabled<DestroyEntityFlag>(entity, true);

@@ -1,8 +1,14 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 public struct PlayerTag : IComponentData {}
+
+public struct RevivePlayerCount : IComponentData 
+{
+    public int Value;
+    public bool IsAdvUsed;
+}
 
 public struct CameraTarget: IComponentData
 {
@@ -22,6 +28,11 @@ public struct InitializeCameraTargetTag : IComponentData { }
             AddComponent<PlayerTag>(entity);
             AddComponent<InitializeCameraTargetTag>(entity);
             AddComponent<CameraTarget>(entity);
+            AddComponent(entity, new RevivePlayerCount()
+            {
+                Value = 1,
+                IsAdvUsed = false
+            });
         }
     }
 }
