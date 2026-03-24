@@ -1,24 +1,34 @@
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
 using Unity.Entities;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
+using YG;
 
 public class GameUIController : MonoBehaviour
 {
     public static GameUIController Instance;
 
+    [Header("In the Game")]
+    [SerializeField] private TextMeshProUGUI gemsCollected;
+    [SerializeField] private Button pauseButton;
 
-    [SerializeField] private GameObject _gameOverPanel;
-    [SerializeField] private Button _quitButton;
-    [SerializeField] private TextMeshProUGUI _gemsCollected;
+    [Header("GameOver Menu")]
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private Button quitButton;
+    
+    [Header("Pause Menu")]
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private Button resumeButton;
+    [SerializeField] private Button pauseQuitButton;
 
-    [SerializeField] private GameObject _pausePanel;
-    [SerializeField] private Button _resumeButton;
-    [SerializeField] private Button _pauseQuitButton;
+    [Header("Preparring to death")]
+    [SerializeField] private GameObject preparingToDeathPanel;
+    [SerializeField] private Button consentToAdvButton;
+    [SerializeField] private Button rejectOfAdvButton;
 
-    private bool _isPaused = false;
+    private bool isPaused = false;
 
     private void Awake()
     {
@@ -31,41 +41,37 @@ public class GameUIController : MonoBehaviour
         UpdateGemsCollectedText(0);
     }
 
+    private void Start()
+    {
+        gameOverPanel.SetActive(false);
+        pausePanel.SetActive(false);
+        preparingToDeathPanel.SetActive(false);
+    }
 
     private void OnEnable()
     {
-        _quitButton.onClick.AddListener(OnQuitButtonClicked);
-        _resumeButton.onClick.AddListener(OnResumeButtonClicked);
-        _pauseQuitButton.onClick.AddListener(OnQuitButtonClicked);
+        pauseButton.onClick.AddListener(OnPauseButtonClicked);
+        quitButton.onClick.AddListener(OnQuitButtonClicked);
+        resumeButton.onClick.AddListener(OnPauseButtonClicked);
+        pauseQuitButton.onClick.AddListener(OnQuitButtonClicked);
+        consentToAdvButton.onClick.AddListener(OnConsentToAdvButton);
+        rejectOfAdvButton.onClick.AddListener(OnRejectOfAdvButton);
     }
+
     private void OnDisable()
     {
-        _quitButton.onClick.RemoveListener(OnQuitButtonClicked);
-        _resumeButton.onClick.RemoveListener(OnResumeButtonClicked);
-        _pauseQuitButton.onClick.RemoveListener(OnQuitButtonClicked);
-    }
-
-    private void Start()
-    {
-        _gameOverPanel.SetActive(false);
-        _pausePanel.SetActive(false);
-    }
-
-    private void Update()
-    {
-    }
-
-    private void ToggleGamePause()
-    {
-        _isPaused = !_isPaused;
-        _pausePanel.SetActive(_isPaused);
-        SetEcsEnabled(!_isPaused);
+        pauseButton.onClick.RemoveListener(OnPauseButtonClicked);
+        quitButton.onClick.RemoveListener(OnQuitButtonClicked);
+        resumeButton.onClick.RemoveListener(OnPauseButtonClicked);
+        pauseQuitButton.onClick.RemoveListener(OnQuitButtonClicked);
+        consentToAdvButton.onClick.RemoveListener(OnConsentToAdvButton);
+        rejectOfAdvButton.onClick.RemoveListener(OnRejectOfAdvButton);
     }
 
     private void SetEcsEnabled(bool shouldEnable) 
     {
         var defaultWorld = World.DefaultGameObjectInjectionWorld;
-        if (defaultWorld != null)
+        if (defaultWorld == null)
         {
             return;
         }
@@ -74,9 +80,15 @@ public class GameUIController : MonoBehaviour
         initSystemGroup.Enabled = shouldEnable;
     }
 
-    public void UpdateGemsCollectedText(int gemsCollected)
+    public void PauseGame(bool onPaus)
     {
-        _gemsCollected.text = $"Gems Collected: {gemsCollected}";
+        isPaused = onPaus;
+        SetEcsEnabled(!isPaused);
+    }
+
+    public void UpdateGemsCollectedText(int gems)
+    {
+        gemsCollected.text = $"{gems}";
     }
 
     public void ShowGameOverUI()
@@ -87,17 +99,38 @@ public class GameUIController : MonoBehaviour
     private IEnumerator ShowGameOverUICoroutine()
     {
         yield return new WaitForSeconds(1.5f);
-        _gameOverPanel.SetActive(true);
+        gameOverPanel.SetActive(true);
     }
 
-    private void OnResumeButtonClicked()
+    public void SwitchDeathPanel()
     {
-        ToggleGamePause();
+        PauseGame(!isPaused);
+        preparingToDeathPanel.SetActive(!preparingToDeathPanel.activeInHierarchy);
     }
+
+    #region OnButtonsClicked
 
     private void OnQuitButtonClicked()
     {
         SetEcsEnabled(true);
         SceneManager.LoadScene("MainMenu");
     }
+
+    private void OnPauseButtonClicked()
+    {
+        PauseGame(!isPaused);
+        pausePanel.SetActive(isPaused);
+    }
+
+    private void OnConsentToAdvButton()
+    {
+        RewardedAdvController.Instance.ShowRewardedAdv(RewardedAdvAwards.extraLife);
+        SwitchDeathPanel();
+    }
+
+    private void OnRejectOfAdvButton()
+    {
+        SwitchDeathPanel();
+    }
+    #endregion
 }

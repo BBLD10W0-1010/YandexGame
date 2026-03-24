@@ -21,9 +21,12 @@ namespace Assets.Scripts.DeathConsequencesSystems
                 if (revivesCount.ValueRW.Value > 0)
                 {
                     revivesCount.ValueRW.Value--;
-                    currentHealth.ValueRW.Value = maxHealth.ValueRW.Value / 2;
+                    currentHealth.ValueRW.Value = maxHealth.ValueRW.Value;
                     SystemAPI.SetComponentEnabled<DestroyEntityFlag>(entity, false);
-
+                }
+                else if (!revivesCount.ValueRW.IsAdvUsed)
+                {
+                    GameUIController.Instance.SwitchDeathPanel();
                 }
             }
         }
