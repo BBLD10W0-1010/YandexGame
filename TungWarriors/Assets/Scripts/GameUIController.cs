@@ -130,6 +130,27 @@ public class GameUIController : MonoBehaviour
 
     private void OnRejectOfAdvButton()
     {
+        var world = World.DefaultGameObjectInjectionWorld;
+        if (world == null || !world.IsCreated) return;
+
+        var playerQuery = world.EntityManager.CreateEntityQuery(
+            typeof(RevivePlayerCount),
+            typeof(PlayerTag)
+        );
+
+        if (!playerQuery.IsEmpty)
+        {
+            var playerEntity = playerQuery.GetSingletonEntity();
+
+            var newRevivePlayerCount = world.EntityManager.GetComponentData<RevivePlayerCount>(playerEntity);
+            newRevivePlayerCount.IsAdvUsed = true;
+
+            world.EntityManager.SetComponentData(playerEntity, newRevivePlayerCount);
+            world.EntityManager.SetComponentEnabled<DestroyEntityFlag>(playerEntity, true);
+
+            playerQuery.Dispose();
+        }
+
         SwitchDeathPanel();
     }
     #endregion

@@ -26,6 +26,7 @@ namespace Assets.Scripts.DeathConsequencesSystems
                 }
                 else if (!revivesCount.ValueRW.IsAdvUsed)
                 {
+                    SystemAPI.SetComponentEnabled<DestroyEntityFlag>(entity, false);
                     GameUIController.Instance.SwitchDeathPanel();
                 }
             }

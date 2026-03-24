@@ -35,7 +35,7 @@ public class RewardedAdvController : MonoBehaviour
 
         var world = World.DefaultGameObjectInjectionWorld;
 
-        switch(rewardId)
+        switch (rewardId)
         {
             case(RewardedAdvAwards.extraLife):
                 YG2.RewardedAdvShow(rewardId.ToString(), () =>
@@ -46,7 +46,6 @@ public class RewardedAdvController : MonoBehaviour
                         typeof(CharacterCurrentHitPoints),
                         typeof(CharacterMaxHitPoints),
                         typeof(RevivePlayerCount),
-                        typeof(DestroyEntityFlag),
                         typeof(PlayerTag)
                     );
 
