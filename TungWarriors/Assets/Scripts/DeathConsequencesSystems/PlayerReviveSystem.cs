@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Assets.Scripts.DeathConsequencesSystems
 {
+    public struct PlayerThinkingFlag : IEnableableComponent, IComponentData { }
+
     [UpdateInGroup(typeof(DeathConsequencesGroup))]
     public partial struct PlayerReviveSystem : ISystem
     {
@@ -14,7 +17,7 @@ namespace Assets.Scripts.DeathConsequencesSystems
         {
             foreach (var (revivesCount, currentHealth, maxHealth, entity) in
                      SystemAPI.Query<RefRW<RevivePlayerCount>, RefRW<CharacterCurrentHitPoints>, RefRW<CharacterMaxHitPoints>>()
-                     .WithAll<DestroyEntityFlag>()
+                     .WithAll<DeathEntityFlag>()
                      .WithAll<PlayerTag>()
                      .WithEntityAccess())
             {
@@ -22,12 +25,18 @@ namespace Assets.Scripts.DeathConsequencesSystems
                 {
                     revivesCount.ValueRW.Value--;
                     currentHealth.ValueRW.Value = maxHealth.ValueRW.Value;
-                    SystemAPI.SetComponentEnabled<DestroyEntityFlag>(entity, false);
+                    SystemAPI.SetComponentEnabled<DeathEntityFlag>(entity, false);
                 }
                 else if (!revivesCount.ValueRW.IsAdvUsed)
                 {
-                    SystemAPI.SetComponentEnabled<DestroyEntityFlag>(entity, false);
+                    Debug.Log("Start revive");
+                    revivesCount.ValueRW.IsAdvUsed = true;
                     GameUIController.Instance.SwitchDeathPanel();
+                }
+                else if(!SystemAPI.IsComponentEnabled<PlayerThinkingFlag>(entity))
+                {
+                    Debug.Log("Start Destroy");
+                    SystemAPI.SetComponentEnabled<DestroyEntityFlag>(entity, true);
                 }
             }
         }

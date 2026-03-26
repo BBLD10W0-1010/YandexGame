@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.DeathConsequencesSystems;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 public struct PlayerTag : IComponentData {}
 
 public struct RevivePlayerCount : IComponentData 
@@ -33,6 +34,8 @@ public struct InitializeCameraTargetTag : IComponentData { }
                 Value = 1,
                 IsAdvUsed = false
             });
+            AddComponent<PlayerThinkingFlag>(entity);
+            SetComponentEnabled<PlayerThinkingFlag>(entity, false);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.DeathConsequencesSystems;
+using System;
 using Unity.Entities;
 using UnityEngine;
 using YG; // PluginYG2 пространство имен
@@ -45,7 +46,6 @@ public class RewardedAdvController : MonoBehaviour
                     var playerQuery = world.EntityManager.CreateEntityQuery(
                         typeof(CharacterCurrentHitPoints),
                         typeof(CharacterMaxHitPoints),
-                        typeof(RevivePlayerCount),
                         typeof(PlayerTag)
                     );
 
@@ -59,16 +59,14 @@ public class RewardedAdvController : MonoBehaviour
                             Value = maxHitPoints.Value
                         };
 
-                        var newRevivePlayerCount = world.EntityManager.GetComponentData<RevivePlayerCount>(playerEntity);
-                        newRevivePlayerCount.IsAdvUsed = true;
-
                         world.EntityManager.SetComponentData(playerEntity, newCurrentHitPoints);
-                        world.EntityManager.SetComponentData(playerEntity, newRevivePlayerCount);
+                        world.EntityManager.SetComponentEnabled<DeathEntityFlag>(playerEntity, false);
 
-                        world.EntityManager.SetComponentEnabled<DestroyEntityFlag>(playerEntity, false);
-
+                        UnityEngine.Debug.Log("End Revive");
+                        
                         playerQuery.Dispose();
                     }
+                    GameUIController.Instance.SwitchDeathPanel();
                 });
                 break;
         }
