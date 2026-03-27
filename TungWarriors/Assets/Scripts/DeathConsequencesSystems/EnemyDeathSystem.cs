@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Assets.Scripts.DeathConsequencesSystems
 {
@@ -15,9 +16,10 @@ namespace Assets.Scripts.DeathConsequencesSystems
             foreach (var (_, entity) in
                      SystemAPI.Query<DeathEntityFlag>()
                      .WithAll<EnemyTag>()
-                     .WithPresent<DeathEntityFlag>()
+                     .WithAll<DeathEntityFlag>()
                      .WithEntityAccess())
             {
+                Debug.Log("Enemy death");
                SystemAPI.SetComponentEnabled<DestroyEntityFlag>(entity, true);
             }
         }

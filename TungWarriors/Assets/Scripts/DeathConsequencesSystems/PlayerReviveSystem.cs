@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,10 @@ using UnityEngine;
 
 namespace Assets.Scripts.DeathConsequencesSystems
 {
+    /// <summary>
+    /// Флаг, указывающий, что игрок находится в режиме ожидания решения о воскрешении.
+    /// Когда этот флаг включен, игрок не уничтожается, пока игрок принимает решение.
+    /// </summary>
     public struct PlayerThinkingFlag : IEnableableComponent, IComponentData { }
 
     [UpdateInGroup(typeof(DeathConsequencesGroup))]
