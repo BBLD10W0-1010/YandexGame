@@ -139,6 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackDamage: 5
   attackCooldownTime: 0.5
+  GemPrefab: {fileID: 249418830305474023, guid: 4c1fa6a6c5c0abd44bc2e115a4ac4a92, type: 3}
 --- !u!54 &6578274043206448170
 Rigidbody:
   m_ObjectHideFlags: 0
