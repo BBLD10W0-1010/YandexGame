@@ -32,6 +32,11 @@ public struct PlayerCooldownExpirationTimestamp : IComponentData
 {
     public double Value;
 }
+
+public struct GemsCollectedCount : IComponentData
+{
+    public int Value;
+}
 public class PlayerAuthoring : MonoBehaviour
 {
     public GameObject AttackPrefab;
@@ -68,6 +73,7 @@ public class PlayerAuthoring : MonoBehaviour
                 CollisionFilter = attackCollisionFilter
             });
             AddComponent<PlayerCooldownExpirationTimestamp>(entity);
+            AddComponent(entity, new GemsCollectedCount { Value = 0 });
         }
     }
 }

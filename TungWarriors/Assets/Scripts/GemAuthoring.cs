@@ -1,0 +1,69 @@
+﻿using System.Collections;
+using UnityEngine;
+using Unity.Entities;
+using Unity.Physics;
+using ReadOnly = Unity.Collections.ReadOnlyAttribute;
+public struct GemTag : IComponentData { }
+public class GemAuthoring : MonoBehaviour
+{
+    private class Baker : Baker<GemAuthoring>
+    {
+        public override void Bake(GemAuthoring authoring)
+        {
+            var entity = GetEntity(TransformUsageFlags.Dynamic);
+            AddComponent<GemTag>(entity);
+            AddComponent<DestroyEntityFlag>(entity);
+            SetComponentEnabled<DestroyEntityFlag>(entity, false);
+
+        }
+    }
+}
+public partial struct CollectGemSystem : ISystem
+{
+    public void OnUpdate(ref SystemState state)
+    {
+        var newCollectJob = new CollectGemJob
+        {
+            GemLookup = SystemAPI.GetComponentLookup<GemTag>(true),
+            GemsCollectedLookup = SystemAPI.GetComponentLookup<GemsCollectedCount>(),
+            DestroyEntityFlagLookup = SystemAPI.GetComponentLookup<DestroyEntityFlag>()
+        };
+
+        var simulationSingleton = SystemAPI.GetSingleton<SimulationSingleton>();
+        state.Dependency = newCollectJob.Schedule(simulationSingleton, state.Dependency);
+    }
+}
+
+
+public struct CollectGemJob : ITriggerEventsJob
+{
+    [ReadOnly] public ComponentLookup<GemTag> GemLookup;
+    public ComponentLookup<GemsCollectedCount> GemsCollectedLookup;
+    public ComponentLookup<DestroyEntityFlag> DestroyEntityFlagLookup;
+    public void Execute(TriggerEvent triggerEvent)
+    {
+        Entity gemEntity;
+        Entity playerEntity;
+
+        if (GemLookup.HasComponent(triggerEvent.EntityA) && GemsCollectedLookup.HasComponent(triggerEvent.EntityB))
+        {
+            gemEntity = triggerEvent.EntityA;
+            playerEntity = triggerEvent.EntityB;
+        }
+        else if (GemLookup.HasComponent(triggerEvent.EntityB) && GemsCollectedLookup.HasComponent(triggerEvent.EntityA))
+        {
+            gemEntity = triggerEvent.EntityB;
+            playerEntity = triggerEvent.EntityA;
+        }
+        else
+        {
+            return;
+        }
+
+        var gemsCollected = GemsCollectedLookup[playerEntity];
+        gemsCollected.Value += 1;
+        GemsCollectedLookup[playerEntity] = gemsCollected;
+
+        DestroyEntityFlagLookup.SetComponentEnabled(gemEntity, true);
+    }
+}
