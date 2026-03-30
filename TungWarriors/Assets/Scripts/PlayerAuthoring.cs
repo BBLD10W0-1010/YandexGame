@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.DeathConsequencesSystems;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 using System.Timers;
 using Unity.Physics;
 using Unity.Collections;
+
 public struct PlayerTag : IComponentData {}
 
 public struct RevivePlayerCount : IComponentData 
@@ -65,6 +67,8 @@ public class PlayerAuthoring : MonoBehaviour
                 Value = 1,
                 IsAdvUsed = false
             });
+            AddComponent<PlayerThinkingFlag>(entity);
+            SetComponentEnabled<PlayerThinkingFlag>(entity, false);
             AddComponent(entity, new PlayerAttackData()
             {
                 AttackPrefab = GetEntity(authoring.AttackPrefab, TransformUsageFlags.Dynamic),

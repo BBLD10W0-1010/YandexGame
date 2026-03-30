@@ -1,9 +1,10 @@
-﻿using Unity.Entities;
-using UnityEngine;
-using Unity.Mathematics;
-using UnityEngine.Rendering;
-using Unity.Physics;
+﻿using Assets.Scripts.DeathConsequencesSystems;
 using Unity.Burst;
+using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Physics;
+using UnityEngine;
+using UnityEngine.Rendering;
 
 public struct InitializeCharacterFlag : IComponentData, IEnableableComponent
 {
@@ -54,6 +55,8 @@ public class CharacterAuthoring : MonoBehaviour
             AddBuffer<DamageThisFrame>(entity);
             AddComponent<DestroyEntityFlag>(entity);
             SetComponentEnabled<DestroyEntityFlag>(entity, false);
+            AddComponent<DeathEntityFlag>(entity);
+            SetComponentEnabled<DeathEntityFlag>(entity, false);
         }
     }
 }
@@ -89,7 +92,7 @@ public partial struct ProcessDamageThisFrameSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        foreach (var (hitpoints, damageThisFrame,entity) in SystemAPI.Query<RefRW<CharacterCurrentHitPoints>, DynamicBuffer<DamageThisFrame>>().WithPresent<DestroyEntityFlag>().WithEntityAccess())
+        foreach (var (hitpoints, damageThisFrame,entity) in SystemAPI.Query<RefRW<CharacterCurrentHitPoints>, DynamicBuffer<DamageThisFrame>>().WithPresent<DeathEntityFlag>().WithEntityAccess())
         {
             
             if (damageThisFrame.IsEmpty) continue;
@@ -100,7 +103,7 @@ public partial struct ProcessDamageThisFrameSystem : ISystem
             damageThisFrame.Clear();
             if (hitpoints.ValueRO.Value <= 0)
             {
-                SystemAPI.SetComponentEnabled<DestroyEntityFlag>(entity, true);
+                SystemAPI.SetComponentEnabled<DeathEntityFlag>(entity, true);
             }
         }
     }
