@@ -20,6 +20,10 @@ public class GemAuthoring : MonoBehaviour
 }
 public partial struct CollectGemSystem : ISystem
 {
+    public void OnCreate(ref SystemState state)
+    {
+        state.RequireForUpdate<GemTag>();
+    }
     public void OnUpdate(ref SystemState state)
     {
         var newCollectJob = new CollectGemJob
