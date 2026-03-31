@@ -30,7 +30,8 @@ public partial struct CollectGemSystem : ISystem
         {
             GemLookup = SystemAPI.GetComponentLookup<GemTag>(true),
             GemsCollectedLookup = SystemAPI.GetComponentLookup<GemsCollectedCount>(),
-            DestroyEntityFlagLookup = SystemAPI.GetComponentLookup<DestroyEntityFlag>()
+            DestroyEntityFlagLookup = SystemAPI.GetComponentLookup<DestroyEntityFlag>(),
+            UpdateGemUILookup = SystemAPI.GetComponentLookup<UpdateGemUIFlag>()
         };
 
         var simulationSingleton = SystemAPI.GetSingleton<SimulationSingleton>();
@@ -44,6 +45,7 @@ public struct CollectGemJob : ITriggerEventsJob
     [ReadOnly] public ComponentLookup<GemTag> GemLookup;
     public ComponentLookup<GemsCollectedCount> GemsCollectedLookup;
     public ComponentLookup<DestroyEntityFlag> DestroyEntityFlagLookup;
+    public ComponentLookup<UpdateGemUIFlag> UpdateGemUILookup;
     public void Execute(TriggerEvent triggerEvent)
     {
         Entity gemEntity;
@@ -67,6 +69,8 @@ public struct CollectGemJob : ITriggerEventsJob
         var gemsCollected = GemsCollectedLookup[playerEntity];
         gemsCollected.Value += 1;
         GemsCollectedLookup[playerEntity] = gemsCollected;
+
+        UpdateGemUILookup.SetComponentEnabled(playerEntity, true);
 
         DestroyEntityFlagLookup.SetComponentEnabled(gemEntity, true);
     }
