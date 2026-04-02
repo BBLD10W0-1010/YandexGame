@@ -9,8 +9,6 @@ public class RevivePanel : MonoBehaviour
     [SerializeField] private Button consentToAdvButton;
     [SerializeField] private Button rejectOfAdvButton;
 
-    private void Awake() => panelRoot.SetActive(false);
-
     private void OnEnable()
     {
         consentToAdvButton.onClick.AddListener(OnConsentClicked);

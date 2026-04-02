@@ -186,7 +186,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TilePrefab: {fileID: 544978459878761847, guid: d442c722d487ee442b85aa06524c3a73, type: 3}
   TileSize: 24.9
-  GridDimension: 7
+  GridDimension: 3
+  RockPrefab: {fileID: 9046368672052872435, guid: c91587e18f3f1ba4bb657ed8e4d6e5cb, type: 3}
+  RocksPerTile: 9
 --- !u!4 &349627560
 Transform:
   m_ObjectHideFlags: 0

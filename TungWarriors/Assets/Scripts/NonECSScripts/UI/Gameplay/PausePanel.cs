@@ -7,8 +7,6 @@ public class PausePanel : MonoBehaviour
     [SerializeField] private Button resumeButton;
     [SerializeField] private Button quitButton;
 
-    private void Awake() => panelRoot.SetActive(false);
-
     private void OnEnable()
     {
         resumeButton.onClick.AddListener(Hide);

@@ -1,6 +1,7 @@
 ﻿using Unity.Entities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameUIController : MonoBehaviour
 {
@@ -50,7 +51,13 @@ public class GameUIController : MonoBehaviour
 
     public void ShowGameOverUI()
     {
-        gameOverPanel.ShowDelayed();
+        StartCoroutine(ShowGameOverUICoroutine());
+    }
+
+    private IEnumerator ShowGameOverUICoroutine()
+    {
+        yield return new WaitForSecondsRealtime(1.5f);
+        gameOverPanel.ShowCanvas();
     }
     public void SwitchDeathPanel()
     {

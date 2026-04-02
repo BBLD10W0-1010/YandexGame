@@ -7,20 +7,29 @@ public class MapAuthoring : MonoBehaviour
     [Tooltip("Лучше ставить нечетные числа")]
     public float TileSize;
     [Range(3, 13)]
-    public int GridDimension;
+    public int GridDimension; 
+    public GameObject RockPrefab;
+    public int RocksPerTile;
 
     private class Baker : Baker<MapAuthoring>
     {
         public override void Bake(MapAuthoring authoring)
         {
             var entity = GetEntity(TransformUsageFlags.None);
+            var tileEntity = GetEntity(authoring.TilePrefab, TransformUsageFlags.Dynamic);
+            var rockEntity = GetEntity(authoring.RockPrefab, TransformUsageFlags.Dynamic);
             AddComponent(entity, new MapSettings
             {
                 TilePrefab = GetEntity(authoring.TilePrefab, TransformUsageFlags.Dynamic),
                 TileSize = authoring.TileSize,
-                GridDimension = authoring.GridDimension
+                GridDimension = authoring.GridDimension,
+                RockPrefab = rockEntity,
+                RocksPerTile = authoring.RocksPerTile
             });
             AddComponent<InitializeMapFlag>(entity);
+            AddComponent<InitializeRocksFlag>(entity);
+            SetComponentEnabled<InitializeMapFlag>(entity, true);
+            SetComponentEnabled<InitializeRocksFlag>(entity, true);
         }
     }
 }

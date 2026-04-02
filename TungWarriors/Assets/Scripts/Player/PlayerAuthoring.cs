@@ -30,7 +30,7 @@ public class PlayerAuthoring : MonoBehaviour
 
             AddComponent(entity, new RevivePlayerCount()
             {
-                Value = 0,
+                Value = 1,
                 IsAdvUsed = false
             });
             AddComponent<PlayerThinkingFlag>(entity);
