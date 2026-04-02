@@ -11,5 +11,7 @@ public struct EnemySpawnData : IComponentData
 public struct EnemySpawnState : IComponentData
 {
     public float SpawnTimer;
+    public int CurrentSpawnedEnemies;
+    public int MaxSpawnedEnemies;
     public Random Random;
 }

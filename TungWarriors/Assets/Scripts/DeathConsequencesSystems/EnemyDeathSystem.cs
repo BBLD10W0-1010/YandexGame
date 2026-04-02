@@ -8,14 +8,13 @@ namespace Assets.Scripts.DeathConsequencesSystems
     {
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (_, entity) in
-                     SystemAPI.Query<DeathEntityFlag>()
-                     .WithAll<EnemyTag>()
-                     .WithAll<DeathEntityFlag>()
-                     .WithEntityAccess())
+            var spawnState = SystemAPI.GetSingletonRW<EnemySpawnState>();
+
+            foreach (var (_, entity) in SystemAPI.Query<DeathEntityFlag>().WithAll<EnemyTag>().WithAll<DeathEntityFlag>().WithEntityAccess())
             {
-               Debug.Log("Enemy death");
-               SystemAPI.SetComponentEnabled<DestroyEntityFlag>(entity, true);
+                Debug.Log("Enemy death");
+                SystemAPI.SetComponentEnabled<DestroyEntityFlag>(entity, true);
+                spawnState.ValueRW.CurrentSpawnedEnemies--;
             }
         }
     }

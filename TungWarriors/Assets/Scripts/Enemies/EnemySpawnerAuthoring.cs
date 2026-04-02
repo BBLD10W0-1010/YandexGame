@@ -8,7 +8,9 @@ public class EnemySpawnerAuthoring : MonoBehaviour
     public float SpawnInterval;
     public float spawnDistance;
     public uint RandomSeed;
-    
+    public int MaxSpawnedEnemies;
+    public int CurrentSpawnedEnemies;
+
     private class Baker : Baker<EnemySpawnerAuthoring>
     {
         public override void Bake(EnemySpawnerAuthoring authoring)
@@ -23,7 +25,9 @@ public class EnemySpawnerAuthoring : MonoBehaviour
             AddComponent(entity, new EnemySpawnState
             {
                 SpawnTimer = 0f,
-                Random = Random.CreateFromIndex(authoring.RandomSeed)
+                Random = Random.CreateFromIndex(authoring.RandomSeed),
+                CurrentSpawnedEnemies = authoring.CurrentSpawnedEnemies,
+                MaxSpawnedEnemies = authoring.MaxSpawnedEnemies
             });
         }
     }

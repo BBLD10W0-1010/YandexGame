@@ -24,8 +24,10 @@ public partial struct EnemySpawnSystem : ISystem
 
         foreach (var (spawnState, spawnData) in SystemAPI.Query<RefRW<EnemySpawnState>, EnemySpawnData>())
         {
+            if (spawnState.ValueRO.CurrentSpawnedEnemies >= spawnState.ValueRO.MaxSpawnedEnemies) continue;
             spawnState.ValueRW.SpawnTimer -= deltaTime;
             if (spawnState.ValueRO.SpawnTimer > 0f) continue;
+          
             spawnState.ValueRW.SpawnTimer = spawnData.spawnInterval;
 
             var newEnemy = ecb.Instantiate(spawnData.EnemyPrefab);
@@ -38,7 +40,7 @@ public partial struct EnemySpawnSystem : ISystem
             };
             spawnPoint *= spawnData.spawnDistance;
             spawnPoint += playerPosition;
-
+            spawnState.ValueRW.CurrentSpawnedEnemies++;
             ecb.SetComponent(newEnemy, LocalTransform.FromPosition(spawnPoint));
         }
     }
