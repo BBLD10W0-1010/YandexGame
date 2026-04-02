@@ -303,6 +303,7 @@ GameObject:
   - component: {fileID: 309138875}
   - component: {fileID: 309138877}
   - component: {fileID: 309138876}
+  - component: {fileID: 309138878}
   m_Layer: 5
   m_Name: PausePanel
   m_TagString: Untagged
@@ -345,7 +346,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.9411765}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -369,6 +370,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 309138874}
   m_CullTransparentMesh: 1
+--- !u!114 &309138878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 309138874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e23c2fc9042617f419d8910b1fe43514, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelRoot: {fileID: 309138874}
+  resumeButton: {fileID: 734328263}
+  quitButton: {fileID: 1241218650}
 --- !u!1 &363997548
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,6 +698,7 @@ GameObject:
   - component: {fileID: 504070362}
   - component: {fileID: 504070364}
   - component: {fileID: 504070363}
+  - component: {fileID: 504070365}
   m_Layer: 5
   m_Name: GameOverPanel
   m_TagString: Untagged
@@ -748,6 +765,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 504070361}
   m_CullTransparentMesh: 1
+--- !u!114 &504070365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504070361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ab403e2175c1549bcecaa263b6ca9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelRoot: {fileID: 504070361}
+  quitButton: {fileID: 1973156139}
 --- !u!1 &508976090
 GameObject:
   m_ObjectHideFlags: 0
@@ -1600,6 +1631,7 @@ GameObject:
   m_Component:
   - component: {fileID: 654067797}
   - component: {fileID: 654067798}
+  - component: {fileID: 654067799}
   m_Layer: 5
   m_Name: CurrenciesPanel
   m_TagString: Untagged
@@ -1635,6 +1667,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 654067796}
   m_CullTransparentMesh: 1
+--- !u!114 &654067799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 654067796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd9a7fb97a9157a49a3692039af988b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gemsCollected: {fileID: 206436354}
+  pauseButton: {fileID: 2042365852}
 --- !u!1 &657294957
 GameObject:
   m_ObjectHideFlags: 0
@@ -2253,7 +2299,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1316272726}
   - component: {fileID: 1316272725}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameUIController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2272,16 +2318,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec024c8b88fd8044ab1dbbaecede6991, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gemsCollected: {fileID: 206436354}
-  pauseButton: {fileID: 2042365852}
-  gameOverPanel: {fileID: 504070361}
-  quitButton: {fileID: 1973156139}
-  pausePanel: {fileID: 309138874}
-  resumeButton: {fileID: 734328263}
-  pauseQuitButton: {fileID: 1241218650}
-  preparingToDeathPanel: {fileID: 1688301503}
-  consentToAdvButton: {fileID: 1676901810}
-  rejectOfAdvButton: {fileID: 463726832}
+  hudPanel: {fileID: 654067799}
+  pausePanel: {fileID: 309138878}
+  gameOverPanel: {fileID: 504070365}
+  revivePanel: {fileID: 1688301507}
 --- !u!4 &1316272726
 Transform:
   m_ObjectHideFlags: 0
@@ -2293,93 +2333,6 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 124, y: 220.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1393752003
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1393752005}
-  - component: {fileID: 1393752004}
-  m_Layer: 0
-  m_Name: MoonSurface_0
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!212 &1393752004
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1393752003}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -5677653957957506772, guid: 2b20e764b78a68d4081ade12317b8ddf, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 2
-  m_Size: {x: 200, y: 200}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
---- !u!4 &1393752005
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1393752003}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3695, y: 0.3695, z: 0.3695}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2447,6 +2400,7 @@ GameObject:
   - component: {fileID: 1688301504}
   - component: {fileID: 1688301506}
   - component: {fileID: 1688301505}
+  - component: {fileID: 1688301507}
   m_Layer: 5
   m_Name: PreparingToDeathPanel
   m_TagString: Untagged
@@ -2515,6 +2469,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1688301503}
   m_CullTransparentMesh: 1
+--- !u!114 &1688301507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688301503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f489afe6931d5b43b6d6d677a215943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelRoot: {fileID: 1688301503}
+  consentToAdvButton: {fileID: 1676901810}
+  rejectOfAdvButton: {fileID: 463726832}
 --- !u!1 &1731925627
 GameObject:
   m_ObjectHideFlags: 0
@@ -3213,7 +3182,6 @@ SceneRoots:
   - {fileID: 1052737060}
   - {fileID: 519420032}
   - {fileID: 619394802}
-  - {fileID: 1393752005}
   - {fileID: 598837787}
   - {fileID: 1931042835}
   - {fileID: 408647086}
