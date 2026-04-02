@@ -25,21 +25,12 @@ public partial struct MapInitializationSystem : ISystem
                 {
                     var newTile = ecb.Instantiate(settings.ValueRO.TilePrefab);
                     var pos2D = new float2(x * tileSize, y * tileSize);
-                    var isCenterTile = (x == 0 && y == 0);
-                    var rot = isCenterTile ? quaternion.identity : GetRandomRotation(pos2D);
-                    ecb.SetComponent(newTile, LocalTransform.FromPositionRotation(new float3(pos2D, 0f), rot));
+                    ecb.SetComponent(newTile, LocalTransform.FromPosition(new float3(pos2D, 0f)));
                     ecb.AddComponent<MapTileTag>(newTile);
                 }
             }
         }
         ecb.Playback(state.EntityManager);
-    }
-
-    public quaternion GetRandomRotation(float2 pos)
-    {
-        var hash = math.hash(new int2((int)pos.x, (int)pos.y));
-        var angleDegrees = (hash % 4) * 90f;
-        return quaternion.Euler(0f, 0f, math.radians(angleDegrees));
     }
 }
 
@@ -91,9 +82,7 @@ public partial struct RelocateMapTilesJob : IJobEntity
         if (math.any(newPos != tilePos))
         {
             var hash = math.hash(new int2((int)newPos.x, (int)newPos.y));
-            var angleDegrees = (hash % 4) * 90f;
             transform.Position = new float3(newPos, 0f);
-            transform.Rotation = quaternion.Euler(0f, 0f, math.radians(angleDegrees));
         }
     }
 }
