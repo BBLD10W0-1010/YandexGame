@@ -1,0 +1,61 @@
+﻿using Unity.Entities;
+using Unity.Physics;
+using ReadOnly = Unity.Collections.ReadOnlyAttribute;
+
+public partial struct CollectGemSystem : ISystem
+{
+    public void OnCreate(ref SystemState state)
+    {
+        state.RequireForUpdate<GemTag>();
+    }
+    public void OnUpdate(ref SystemState state)
+    {
+        var newCollectJob = new CollectGemJob
+        {
+            GemLookup = SystemAPI.GetComponentLookup<GemTag>(true),
+            GemsCollectedLookup = SystemAPI.GetComponentLookup<GemsCollectedCount>(),
+            DestroyEntityFlagLookup = SystemAPI.GetComponentLookup<DestroyEntityFlag>(),
+            UpdateGemUILookup = SystemAPI.GetComponentLookup<UpdateGemUIFlag>()
+        };
+
+        var simulationSingleton = SystemAPI.GetSingleton<SimulationSingleton>();
+        state.Dependency = newCollectJob.Schedule(simulationSingleton, state.Dependency);
+    }
+}
+
+
+public struct CollectGemJob : ITriggerEventsJob
+{
+    [ReadOnly] public ComponentLookup<GemTag> GemLookup;
+    public ComponentLookup<GemsCollectedCount> GemsCollectedLookup;
+    public ComponentLookup<DestroyEntityFlag> DestroyEntityFlagLookup;
+    public ComponentLookup<UpdateGemUIFlag> UpdateGemUILookup;
+    public void Execute(TriggerEvent triggerEvent)
+    {
+        Entity gemEntity;
+        Entity playerEntity;
+
+        if (GemLookup.HasComponent(triggerEvent.EntityA) && GemsCollectedLookup.HasComponent(triggerEvent.EntityB))
+        {
+            gemEntity = triggerEvent.EntityA;
+            playerEntity = triggerEvent.EntityB;
+        }
+        else if (GemLookup.HasComponent(triggerEvent.EntityB) && GemsCollectedLookup.HasComponent(triggerEvent.EntityA))
+        {
+            gemEntity = triggerEvent.EntityB;
+            playerEntity = triggerEvent.EntityA;
+        }
+        else
+        {
+            return;
+        }
+
+        var gemsCollected = GemsCollectedLookup[playerEntity];
+        gemsCollected.Value += 1;
+        GemsCollectedLookup[playerEntity] = gemsCollected;
+
+        UpdateGemUILookup.SetComponentEnabled(playerEntity, true);
+
+        DestroyEntityFlagLookup.SetComponentEnabled(gemEntity, true);
+    }
+}

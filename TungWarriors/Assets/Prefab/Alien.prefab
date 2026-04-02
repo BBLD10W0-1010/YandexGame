@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 8364079703564692909}
   - component: {fileID: 4330191720010567941}
   - component: {fileID: 4440117631059058478}
-  - component: {fileID: 8349290815647763909}
   - component: {fileID: 7491212741551374771}
   - component: {fileID: 6578274043206448170}
+  - component: {fileID: 7195351097001032185}
   m_Layer: 7
   m_Name: Alien
   m_TagString: Untagged
@@ -111,20 +111,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.33597326, y: 0.72340655, z: 6.1232336e-17}
   m_Center: {x: -0.0037457943, y: -0.097051024, z: 0}
---- !u!114 &8349290815647763909
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3348793825632737546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0fe44b60ae5a684385636fd3527935d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MoveSpeed: 2
-  HitPoints: 3
 --- !u!114 &7491212741551374771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,3 +153,17 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 3
+--- !u!114 &7195351097001032185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3348793825632737546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad250a2c806cbc3449a725c41315f401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MoveSpeed: 2
+  HitPoints: 4

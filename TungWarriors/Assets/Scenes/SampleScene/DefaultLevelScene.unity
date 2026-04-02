@@ -698,11 +698,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1158497025}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0fe44b60ae5a684385636fd3527935d, type: 3}
+  m_Script: {fileID: 11500000, guid: 28905ddc3e9a7e34e9b8f6e5343c6e75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 3
-  HitPoints: 100
+  AttackPrefab: {fileID: 3201870017696326870, guid: ef4e84a68a81ed046a8deba62a43058a, type: 3}
+  CooldownTime: 1
+  DetectionSize: 10
+  WorldUiPrefab: {fileID: 6848332979229617546, guid: 1b8519ce5d7dc6e48bb4d207983180ca, type: 3}
 --- !u!114 &1158497032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -712,12 +714,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1158497025}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28905ddc3e9a7e34e9b8f6e5343c6e75, type: 3}
+  m_Script: {fileID: 11500000, guid: ad250a2c806cbc3449a725c41315f401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackPrefab: {fileID: 3201870017696326870, guid: ef4e84a68a81ed046a8deba62a43058a, type: 3}
-  CooldownTime: 1
-  DetectionSize: 10
+  MoveSpeed: 3
+  HitPoints: 100
 --- !u!1 &1363665585
 GameObject:
   m_ObjectHideFlags: 0
