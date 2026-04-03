@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AstronautMaterial
+  m_Name: AstronautMaterial 1
   m_Shader: {fileID: -6465566751694194690, guid: 90878e1e703b88b4794b48c4c2023e6d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
