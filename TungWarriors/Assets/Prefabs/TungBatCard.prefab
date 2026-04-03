@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8909430097845597064
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2496681407509349450}
+  - component: {fileID: 4678817309449805258}
+  - component: {fileID: -5880363122811450776}
+  m_Layer: 0
+  m_Name: TungBatCard
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2496681407509349450
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8909430097845597064}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.92344, y: -2.64019, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4678817309449805258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8909430097845597064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f15d46b6c3113a42bd9bff452d2560d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Title: "\u0411\u0438\u0442\u0430 \u0422\u0443\u043D\u0433 \u0422\u0443\u043D\u0433
+    \u0421\u0430\u0445\u0443\u0440\u0430"
+  Description: "\u0411\u044C\u0451\u0442 \u043A\u043E\u043D\u0443\u0441\u043E\u043C
+    \u043F\u043E \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044E
+    \u0434\u0432\u0438\u0436\u0435\u043D\u0438\u044F"
+  Icon: {fileID: 6854849867053495550, guid: f1d364fa2aec8be43bc0ec6837858d44, type: 3}
+--- !u!114 &-5880363122811450776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8909430097845597064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3646049f8c72b14cb6192db92bebd9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BatPrefab: {fileID: 2699361761558147180, guid: 439d2789761aee64f8fd23fa099e5c90, type: 3}

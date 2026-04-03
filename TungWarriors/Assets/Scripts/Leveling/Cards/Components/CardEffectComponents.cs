@@ -22,8 +22,5 @@ public struct CardMoveSpeedBonusEffect : IComponentData
 
 public struct CardUnlockBatWeaponEffect : IComponentData
 {
-    public int Damage;
-    public float Cooldown;
-    public float Range;
-    public float ConeAngleDegrees;
+    public Entity BatPrefab;
 }
