@@ -6,6 +6,10 @@ namespace Assets.Scripts.DeathConsequencesSystems
     [UpdateInGroup(typeof(DeathConsequencesGroup), OrderLast = true)]
     public partial struct EnemyDeathSystem : ISystem
     {
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<EnemySpawnState>();
+        }
         public void OnUpdate(ref SystemState state)
         {
             var spawnState = SystemAPI.GetSingletonRW<EnemySpawnState>();
