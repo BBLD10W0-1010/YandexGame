@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1038252369872540722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6619571939004244485}
+  - component: {fileID: -6451040275984438529}
+  - component: {fileID: 4383808195894974232}
+  m_Layer: 0
+  m_Name: TrallaleroTrallalaCard
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6619571939004244485
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038252369872540722}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.92344, y: -2.64019, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-6451040275984438529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038252369872540722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f15d46b6c3113a42bd9bff452d2560d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Title: "\u0422\u0440\u0430\u043B\u043B\u0430\u043B\u0435\u0440\u043E \u0422\u0440\u0430\u043B\u043B\u0430\u043B\u0430"
+  Description: "+1.5 \u043A \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u0438"
+  Icon: {fileID: 6854849867053495550, guid: f1d364fa2aec8be43bc0ec6837858d44, type: 3}
+--- !u!114 &4383808195894974232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038252369872540722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e473dfd1fa19544cba14eb33e10a72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Value: 1.5

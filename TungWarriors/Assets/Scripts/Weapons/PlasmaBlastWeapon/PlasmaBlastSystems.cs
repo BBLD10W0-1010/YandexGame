@@ -65,7 +65,7 @@ public struct PlasmaBlastAttackJob : ITriggerEventsJob
         }
         else
         {
-            return; // No relevant entities involved in this trigger event
+            return;
         }
 
         var attackDamage = PlasmaBlastDataLookup[plasmaBlastEntity].AttackDamage;

@@ -1,7 +1,8 @@
-﻿using Unity.Entities;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 public class GameUIController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class GameUIController : MonoBehaviour
     [SerializeField] private PausePanel pausePanel;
     [SerializeField] private GameOverPanel gameOverPanel;
     [SerializeField] private RevivePanel revivePanel;
+    [SerializeField] private LevelUpSelectionPanel levelUpSelectionPanel;
 
     public bool IsPaused { get; private set; }
 
@@ -24,18 +26,21 @@ public class GameUIController : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        if (levelUpSelectionPanel != null) //
+            levelUpSelectionPanel.Hide();
+    }
+
     public void TogglePause(bool pause)
     {
         IsPaused = pause;
         var defaultWorld = World.DefaultGameObjectInjectionWorld;
-        if (defaultWorld != null && defaultWorld.IsCreated)
-        {
-            var initSystemGroup = defaultWorld.GetExistingSystemManaged<InitializationSystemGroup>();
-            if (initSystemGroup != null)
-            {
-                initSystemGroup.Enabled = !IsPaused;
-            }
-        }
+        if (defaultWorld == null || !defaultWorld.IsCreated) return;
+        var simGroup = defaultWorld.GetExistingSystemManaged<SimulationSystemGroup>();
+        if (simGroup != null) simGroup.Enabled = !IsPaused;
+        var fixedGroup = defaultWorld.GetExistingSystemManaged<FixedStepSimulationSystemGroup>();
+        if (fixedGroup != null) fixedGroup.Enabled = !IsPaused;
     }
 
     public void QuitToMainMenu()
@@ -68,5 +73,46 @@ public class GameUIController : MonoBehaviour
     {
         TogglePause(true);
         pausePanel.Show();
+    }
+
+    public void ShowLevelUpPanel(List<LevelUpCardViewData> cards)
+    {
+        TogglePause(true);
+        if (levelUpSelectionPanel != null)
+            levelUpSelectionPanel.Show(cards, OnLevelUpCardSelected);
+    }
+
+    public void HideLevelUpPanel()
+    {
+        if (levelUpSelectionPanel != null)
+            levelUpSelectionPanel.Hide();
+    }
+
+    private void OnLevelUpCardSelected(Entity selectedCardEntity)
+    {
+        var world = World.DefaultGameObjectInjectionWorld;
+        if (world == null || !world.IsCreated)
+            return;
+
+        var entityManager = world.EntityManager;
+
+        var playerQuery = entityManager.CreateEntityQuery(
+            ComponentType.ReadOnly<PlayerTag>());
+
+        if (playerQuery.IsEmptyIgnoreFilter)
+        {
+            playerQuery.Dispose();
+            return;
+        }
+
+        var playerEntity = playerQuery.GetSingletonEntity();
+
+        entityManager.SetComponentData(playerEntity, new SelectedLevelUpCard
+        {
+            Value = selectedCardEntity
+        });
+        entityManager.SetComponentEnabled<SelectedLevelUpCard>(playerEntity, true);
+
+        playerQuery.Dispose();
     }
 }

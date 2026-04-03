@@ -2593,6 +2593,7 @@ MonoBehaviour:
   pausePanel: {fileID: 309138878}
   gameOverPanel: {fileID: 504070365}
   revivePanel: {fileID: 1688301507}
+  levelUpSelectionPanel: {fileID: 0}
 --- !u!4 &1316272726
 Transform:
   m_ObjectHideFlags: 0

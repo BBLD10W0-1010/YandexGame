@@ -22,9 +22,13 @@ public partial struct CharacterMoveSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        foreach (var (velocity, direction, speed) in SystemAPI.Query<RefRW<PhysicsVelocity>, CharacterMoveDirection, CharacterMoveSpeed>())
+        foreach (var (velocity, direction, speed, entity) in SystemAPI.Query<RefRW<PhysicsVelocity>, CharacterMoveDirection, CharacterMoveSpeed>()
+            .WithEntityAccess())
         {
-            var moveStep2d = direction.Value * speed.Value;
+            var totalSpeed = speed.Value;
+            if (SystemAPI.HasComponent<CharacterMoveSpeedBonus>(entity))
+                totalSpeed += SystemAPI.GetComponent<CharacterMoveSpeedBonus>(entity).Value;
+            var moveStep2d = direction.Value * totalSpeed;
             velocity.ValueRW.Linear = new float3(moveStep2d, 0f);
         }
     }
@@ -39,9 +43,12 @@ public partial struct ProcessDamageThisFrameSystem : ISystem
         {
 
             if (damageThisFrame.IsEmpty) continue;
+            var defense = 0;
+            if (SystemAPI.HasComponent<CharacterDefense>(entity))
+                defense = SystemAPI.GetComponent<CharacterDefense>(entity).Value;
             foreach (var damage in damageThisFrame)
             {
-                hitpoints.ValueRW.Value -= damage.Value;
+                hitpoints.ValueRW.Value -= math.max(0, damage.Value - defense);
             }
             damageThisFrame.Clear();
             if (hitpoints.ValueRO.Value <= 0)
