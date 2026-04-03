@@ -429,9 +429,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28905ddc3e9a7e34e9b8f6e5343c6e75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackPrefab: {fileID: 3201870017696326870, guid: ef4e84a68a81ed046a8deba62a43058a, type: 3}
-  CooldownTime: 1
-  DetectionSize: 10
+  Pistol:
+    AttackPrefab: {fileID: 3201870017696326870, guid: ef4e84a68a81ed046a8deba62a43058a, type: 3}
+    CooldownTime: 0.5
+    DetectionSize: 10
+    PelletCount: 1
+    SpreadAngle: 0
+    AttackSpawnOffset: 0
+  Shotgun:
+    AttackPrefab: {fileID: 3201870017696326870, guid: ef4e84a68a81ed046a8deba62a43058a, type: 3}
+    CooldownTime: 2
+    DetectionSize: 10
+    PelletCount: 3
+    SpreadAngle: 20
+    AttackSpawnOffset: 0
   WorldUiPrefab: {fileID: 6848332979229617546, guid: 1b8519ce5d7dc6e48bb4d207983180ca, type: 3}
 --- !u!114 &1158497032
 MonoBehaviour:
@@ -494,8 +505,8 @@ MonoBehaviour:
   EnemyPrefab: {fileID: 3348793825632737546, guid: ad73ac19a888e5a4c99fcd10a0660e26, type: 3}
   SpawnInterval: 0.5
   spawnDistance: 27
-  RandomSeed: 1337
-  MaxSpawnedEnemies: 10
+  RandomSeed: 13377331
+  MaxSpawnedEnemies: 30
   CurrentSpawnedEnemies: 0
 --- !u!1 &1997935982
 GameObject:

@@ -16,8 +16,25 @@ public struct PlayerAttackData : IComponentData
     public float CooldownTime;
     public float3 DetectionSize;
     public CollisionFilter CollisionFilter;
+
+    public int PelletCount;
+    public float SpreadAngle;
+    public float AttackSpawnOffset;
 }
 
+public struct PlayerWeaponData : IBufferElementData
+{
+    public Entity AttackPrefab;
+    public float CooldownTime;
+    public double NextFireTime;
+
+    public float3 DetectionSize;
+    public CollisionFilter CollisionFilter;
+
+    public int PelletCount;
+    public float SpreadAngle;
+    public float AttackSpawnOffset;
+}
 public struct PlayerCooldownExpirationTimestamp : IComponentData
 {
     public double Value;
