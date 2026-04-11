@@ -20,6 +20,7 @@ public class BatVisualController : MonoBehaviour
             return;
         }
 
+
         _entityManager = world.EntityManager;
         _playerQuery = _entityManager.CreateEntityQuery(ComponentType.ReadOnly<PlayerTag>());
 
@@ -35,13 +36,16 @@ public class BatVisualController : MonoBehaviour
             return;
 
         var playerEntity = _playerQuery.GetSingletonEntity();
+        var hasBat = _entityManager.HasComponent<BatWeaponData>(playerEntity);
 
-        if (!_entityManager.HasComponent<BatWeaponData>(playerEntity))
+        if (!hasBat)
         {
             batSpriteRenderer.enabled = false;
             return;
         }
 
+        var playerPos = _entityManager.GetComponentData<Unity.Transforms.LocalToWorld>(playerEntity).Position;
+        batVisual.position = new Vector3(playerPos.x, playerPos.y, 0f);
         batSpriteRenderer.enabled = true;
 
         var batData = _entityManager.GetComponentData<BatWeaponData>(playerEntity);

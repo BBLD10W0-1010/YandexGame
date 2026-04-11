@@ -86,54 +86,54 @@ public partial struct RelocateMapTilesJob : IJobEntity
             transform.Position = new float3(newPos, 0f);
         }
     }
+}
 
-    [UpdateInGroup(typeof(InitializationSystemGroup))]
-    [UpdateAfter(typeof(MapInitializationSystem))]
-    public partial struct RockInitializationSystem : ISystem
+[UpdateInGroup(typeof(InitializationSystemGroup))]
+[UpdateAfter(typeof(MapInitializationSystem))]
+public partial struct RockInitializationSystem : ISystem
+{
+    [BurstCompile]
+    public void OnCreate(ref SystemState state)
     {
-        [BurstCompile]
-        public void OnCreate(ref SystemState state)
-        {
-            state.RequireForUpdate<MapSettings>();
-            state.RequireForUpdate<MapTileTag>();
-            state.RequireForUpdate<InitializeRocksFlag>();
-        }
+        state.RequireForUpdate<MapSettings>();
+        state.RequireForUpdate<MapTileTag>();
+        state.RequireForUpdate<InitializeRocksFlag>();
+    }
 
-        [BurstCompile]
-        public void OnUpdate(ref SystemState state)
+    [BurstCompile]
+    public void OnUpdate(ref SystemState state)
+    {
+        var shouldSpawn = false;
+        var settings = SystemAPI.GetSingleton<MapSettings>();
+        var ecb = new EntityCommandBuffer(Allocator.Temp);
+        var halfSize = settings.TileSize * 0.45f;
+        var baseSeed = (uint)UnityEngine.Random.Range(1, int.MaxValue);
+        foreach (var flag in SystemAPI.Query<EnabledRefRW<InitializeRocksFlag>>())
         {
-            var shouldSpawn = false;
-            var settings = SystemAPI.GetSingleton<MapSettings>();
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
-            var halfSize = settings.TileSize * 0.45f;
-            var baseSeed = (uint)System.Diagnostics.Stopwatch.GetTimestamp();
-            foreach (var flag in SystemAPI.Query<EnabledRefRW<InitializeRocksFlag>>())
-            {
-                flag.ValueRW = false;
-                shouldSpawn = true;
-            }
-            if (!shouldSpawn)
-            {
-                ecb.Dispose();
-                return;
-            }
-            foreach (var (tileTransform, tileEntity) in SystemAPI.Query<RefRO<LocalTransform>>()
-                .WithAll<MapTileTag>()
-                .WithEntityAccess())
-            {
-                var random = new Unity.Mathematics.Random(baseSeed + (uint)tileEntity.Index);
-                for (int i = 0; i < settings.RocksPerTile; i++)
-                {
-                    var rock = ecb.Instantiate(settings.RockPrefab);
-                    var rx = random.NextFloat(-halfSize, halfSize);
-                    var ry = random.NextFloat(-halfSize, halfSize);
-                    var localPos = new float3(rx, ry, -0.1f);
-                    ecb.SetComponent(rock, LocalTransform.FromPosition(localPos));
-                    ecb.AddComponent(rock, new Parent { Value = tileEntity });
-                }
-            }
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
+            flag.ValueRW = false;
+            shouldSpawn = true;
         }
+        if (!shouldSpawn)
+        {
+            ecb.Dispose();
+            return;
+        }
+        foreach (var (tileTransform, tileEntity) in SystemAPI.Query<RefRO<LocalTransform>>()
+            .WithAll<MapTileTag>()
+            .WithEntityAccess())
+        {
+            var random = new Unity.Mathematics.Random(baseSeed + (uint)tileEntity.Index);
+            for (int i = 0; i < settings.RocksPerTile; i++)
+            {
+                var rock = ecb.Instantiate(settings.RockPrefab);
+                var rx = random.NextFloat(-halfSize, halfSize);
+                var ry = random.NextFloat(-halfSize, halfSize);
+                var localPos = new float3(rx, ry, -0.1f);
+                ecb.SetComponent(rock, LocalTransform.FromPosition(localPos));
+                ecb.AddComponent(rock, new Parent { Value = tileEntity });
+            }
+        }
+        ecb.Playback(state.EntityManager);
+        ecb.Dispose();
     }
 }
