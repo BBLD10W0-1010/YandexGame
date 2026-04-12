@@ -48,3 +48,5 @@ MonoBehaviour:
   Cooldown: 1.1
   Range: 2.5
   ConeAngleDegrees: 110
+  attackPrefab: {fileID: 3201870017696326870, guid: d00a4434dd4189449883d87c8a6f4368, type: 3}
+  HasSpawned: 0
