@@ -2,6 +2,15 @@
 using Unity.Mathematics;
 using Unity.Physics;
 
+public struct PlayerStats : IComponentData
+{
+    public float BaseDamage;
+    public float BaseSpeed;
+    public float BaseHealth;
+    public float BaseCritChance;
+    public float BaseCritDamage;
+}
+
 public struct RevivePlayerCount : IComponentData
 {
     public int Value;

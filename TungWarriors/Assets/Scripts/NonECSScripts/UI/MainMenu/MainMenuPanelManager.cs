@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ChangeSceneToMain : MonoBehaviour
+public class MainMenuPanelManager : MonoBehaviour
 {
     [SerializeField] private Button _playButton;
     [SerializeField] private Button _exitGame;
