@@ -7,7 +7,8 @@ public class BatWeaponAuthoring : MonoBehaviour
     public float Cooldown;
     public float Range;
     public float ConeAngleDegrees;
-
+    public GameObject attackPrefab;
+    public bool HasSpawned;
     private class Baker : Baker<BatWeaponAuthoring>
     {
         public override void Bake(BatWeaponAuthoring authoring)
@@ -19,13 +20,16 @@ public class BatWeaponAuthoring : MonoBehaviour
                 Damage = authoring.Damage,
                 Cooldown = authoring.Cooldown,
                 Range = authoring.Range,
-                ConeAngleDegrees = authoring.ConeAngleDegrees
+                ConeAngleDegrees = authoring.ConeAngleDegrees,
+                AttackPrefab = GetEntity(authoring.attackPrefab, TransformUsageFlags.Dynamic),
+                HasSpawned = false
             });
 
             AddComponent(entity, new BatWeaponCooldown
             {
                 NextAttackTime = 0d
             });
+            
         }
     }
 }

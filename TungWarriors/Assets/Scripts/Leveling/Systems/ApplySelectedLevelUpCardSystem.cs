@@ -1,4 +1,6 @@
-﻿using Unity.Entities;
+﻿
+using Unity.Entities;
+using UnityEngine;
 
 [UpdateInGroup(typeof(InitializationSystemGroup))]
 public partial struct ApplySelectedLevelUpCardSystem : ISystem
@@ -99,8 +101,11 @@ public partial struct ApplySelectedLevelUpCardSystem : ISystem
             var effect = em.GetComponentData<CardUnlockBatWeaponEffect>(card);
             var batData = em.GetComponentData<BatWeaponData>(effect.BatPrefab);
             var batCooldown = em.GetComponentData<BatWeaponCooldown>(effect.BatPrefab);
+            
             em.AddComponentData(player, batData);
             em.AddComponentData(player, batCooldown);
+
+            Debug.Log("Bat weapon unlocked");
         }
     }
 }

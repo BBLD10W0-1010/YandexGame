@@ -9,12 +9,8 @@ public partial struct ShowLevelUpSelectionSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         if (GameUIController.Instance == null)
-        {
-            UnityEngine.Debug.LogError("GameUIController.Instance is NULL");
             return;
-        }
 
-        UnityEngine.Debug.Log("ShowLevelUpSelectionSystem running");
         var entityManager = state.EntityManager;
         foreach (var (randomState, availableCards, offeredCards, entity) in
                  SystemAPI.Query<RefRW<PlayerCardRandom>,

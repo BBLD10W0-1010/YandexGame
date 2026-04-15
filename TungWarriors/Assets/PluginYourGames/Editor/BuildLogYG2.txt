@@ -1,0 +1,3 @@
+﻿Build path: C:/Users/taran/OneDrive/Desktop/build/TungWarriors.exe
+Build number: 1
+PluginYG version: 2.008

@@ -20,7 +20,6 @@ public partial struct BatWeaponAttackSystem : ISystem
 
     public void OnUpdate(ref SystemState state)
     {
-        // ВАЖНО: завершаем все jobs, которые пишут в DamageThisFrame
         state.EntityManager.CompleteDependencyBeforeRW<DamageThisFrame>();
 
         if (_enemyQuery.IsEmptyIgnoreFilter)
