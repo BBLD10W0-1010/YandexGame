@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
-public enum EquipmentType
+public enum EquipmentOnPlayerType
 {
     Helmet,
-    Weapon,
     Armor,
-    Accessory
+    Weapon1,
+    Weapon2,
+    Accessory1,
+    Accessory2,
 }

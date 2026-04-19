@@ -12,12 +12,14 @@ public class PlayerData : MonoBehaviour
     [SerializeField] private int rubies;
 
     [Header("Inventory")]
-    [SerializeField] private List<Equipment> inventory = new List<Equipment>();
-    [SerializeField] private List<Equipment> currentEquipment;
+    [SerializeField] private List<Equipment> inventory = new();
+
+    [Header("Equipment On Player")]
+    [SerializeField] private Dictionary<EquipmentOnPlayerType, Equipment> equipmentOnPlayer = new();
 
     public event Action<int> OnGoldChanged;
     public event Action<int> OnGemsChanged;
-    public event Action OnInventoryChanged;
+    public event Action<Equipment, bool> OnInventoryChanged;
 
     public int Gold
     {
@@ -40,18 +42,11 @@ public class PlayerData : MonoBehaviour
     }
 
     public List<Equipment> Inventory => inventory;
-    public List<Equipment> CurrentEquipment
-    {
-        get => currentEquipment;
-        set
-        {
-            currentEquipment = value;
-            OnInventoryChanged?.Invoke();
-        }
-    }
+    public Dictionary<EquipmentOnPlayerType, Equipment> EquipmentOnPlayer => equipmentOnPlayer;
 
     private void Awake()
     {
+        Debug.Log("Instance PlayerData");
         if (Instance != null)
         {
             Destroy(gameObject);
@@ -59,6 +54,40 @@ public class PlayerData : MonoBehaviour
         }
 
         Instance = this;
+
         DontDestroyOnLoad(gameObject);
+    }
+
+    public void AddEquipment(Equipment equip)
+    {
+        inventory.Add(equip);
+        OnInventoryChanged?.Invoke(equip, true);
+    }
+
+    public void RemoveEquipment(Equipment equip)
+    {
+        inventory.Remove(equip);
+        OnInventoryChanged?.Invoke(equip, false);
+    }
+
+    public void PutOnEquipment(Equipment equip, EquipmentOnPlayerType type)
+    {
+        if(equipmentOnPlayer.TryGetValue(type, out var equipment))
+            if(equipment != null)
+                AddEquipment(equipment);
+
+        equipmentOnPlayer[type] = equip;
+        RemoveEquipment(equip);
+    }
+
+    public void TakeOffEquipment(EquipmentOnPlayerType type)
+    {
+        if (equipmentOnPlayer.TryGetValue(type, out var equipment))
+        {
+            if (equipment == null)
+                return;
+            AddEquipment(equipment);
+            equipmentOnPlayer[type] = null;
+        }
     }
 }

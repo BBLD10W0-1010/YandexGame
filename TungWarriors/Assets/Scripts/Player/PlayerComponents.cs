@@ -2,13 +2,13 @@
 using Unity.Mathematics;
 using Unity.Physics;
 
-public struct PlayerStats : IComponentData
+public struct EquipmentStats : IComponentData
 {
-    public float BaseDamage;
-    public float BaseSpeed;
-    public float BaseHealth;
-    public float BaseCritChance;
-    public float BaseCritDamage;
+    public float Damage;
+    public float Speed;
+    public float Health;
+    public float CritChance;
+    public float CritDamage;
 }
 
 public struct RevivePlayerCount : IComponentData

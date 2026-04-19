@@ -6,25 +6,25 @@ using System.Threading.Tasks;
 using Unity.Entities;
 using UnityEngine;
 
-public class SpeedBuff : Buff
+public class CritChanceBuff : Buff
 {
-    public override EquipmentType[] Type => new EquipmentType[] { EquipmentType.Weapon, EquipmentType.Accessory, EquipmentType.Armor };
+    public override EquipmentType[] Type => new EquipmentType[] { EquipmentType.Weapon, EquipmentType.Accessory };
 
-    public override float MinValue => (float)0.1;
+    public override float MinValue => -15;
 
-    public override float MaxValue => (float) 1;
+    public override float MaxValue => 15;
 
-    public override float Value { get; set; }
+    public override string Description => $"CritChance {(Value >= 0 ? "+" : "-")}{Math.Abs(Value)}%";
 
     public override void Apply(Entity playerEntity)
     {
         var world = World.DefaultGameObjectInjectionWorld;
         if (world == null || !world.EntityManager.Exists(playerEntity)) return;
 
-        if (world.EntityManager.HasComponent<PlayerStats>(playerEntity))
+        if (world.EntityManager.HasComponent<EquipmentStats>(playerEntity))
         {
-            var stats = world.EntityManager.GetComponentData<PlayerStats>(playerEntity);
-            stats.BaseSpeed += Value;
+            var stats = world.EntityManager.GetComponentData<EquipmentStats>(playerEntity);
+            stats.CritChance += stats.CritChance * Value / 100;
             world.EntityManager.SetComponentData(playerEntity, stats);
         }
         else

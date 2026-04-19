@@ -75,7 +75,7 @@ public class EquipmentFactory : MonoBehaviour
     {
         var bufs = AvailableBuffs.Where(buff => buff.Type.Any(Type => Type == type)).ToArray();
         var result = new List<Buff>();
-        for(var i = 0; i < count; i++)
+        for(var i = 0; i < Math.Min(count, bufs.Count()); i++)
         {
             var buff = bufs[UnityEngine.Random.Range(0, bufs.Count())];
             var buffCopy = (Buff)Activator.CreateInstance(buff.GetType());

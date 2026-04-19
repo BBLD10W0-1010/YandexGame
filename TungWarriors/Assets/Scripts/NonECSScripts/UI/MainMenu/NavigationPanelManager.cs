@@ -36,6 +36,7 @@ public class NavigationPanelManager : MonoBehaviour
 
     private void OnDisable()
     {
+        Debug.Log($"Dis in Nav");
         toMainMenuPanel.onClick.RemoveListener(ChangePanelToMainMenu);
         toInventoryPanel.onClick.RemoveListener(ChangePanelToInventory);
         toShopPanel.onClick.RemoveListener(ChangePanelToShop);
@@ -43,8 +44,8 @@ public class NavigationPanelManager : MonoBehaviour
 
     private void ChangePanel(GameObject panel)
     {
-        panel.SetActive(true);
         currentPanel.SetActive(false);
+        panel.SetActive(true);
         currentPanel = panel;
     }
 

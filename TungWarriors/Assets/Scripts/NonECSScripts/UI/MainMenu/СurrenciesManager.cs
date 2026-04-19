@@ -34,14 +34,11 @@ public class СurrenciesManager : MonoBehaviour
 
     private void Update()
     {
-        // Пытаемся подписаться каждый кадр, пока не получится
         if (!isSubscribed)
         {
             TrySubscribe();
         }
     }
-
-    
 
     private void OnDisable()
     {

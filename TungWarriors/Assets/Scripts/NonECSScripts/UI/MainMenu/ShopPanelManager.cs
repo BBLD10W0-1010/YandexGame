@@ -49,6 +49,9 @@ public class ShopPanelManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI messageText;
     [SerializeField] private Button closeMessagePanel;
 
+    [Header("New Equipment")]
+    [SerializeField] private NewEquipmentPanelManager newEquipmentPanel;
+
 
     private EquipmentFactory equipmentFactory;
 
@@ -177,9 +180,9 @@ public class ShopPanelManager : MonoBehaviour
         Debug.Log($"Buy Diamonds For MoneyLarge");
     }
 
-    private Equipment GetNewEquipment()
+    private void GetNewEquipment()
     {
-        return equipmentFactory.CreateRandomEquipment();
+        newEquipmentPanel.NewEquipment(equipmentFactory.CreateRandomEquipment());
     }
 
     private void OpenMessagePanel(string message)

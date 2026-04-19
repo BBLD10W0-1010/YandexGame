@@ -12,7 +12,7 @@ public class Equipment
     public Sprite Icon { get; set; }
     public EquipmentType Type { get; set; }
     public List<Buff> Buffs { get; set; } = new List<Buff>();
-
+    public int Cost => Buffs.Count * 15;
     public void ApplyToPlayer(Entity playerEntity)
     {
         foreach (var buff in Buffs)
