@@ -48,7 +48,7 @@ public partial struct BatWeaponAttackSystem : ISystem
 
             var rangeSquared = weapon.Range * weapon.Range;
             var cosHalfCone = math.cos(math.radians(weapon.ConeAngleDegrees * 0.5f));
-            var totalDamage = CalculateScaledDamage(weapon.Damage, resolvedStats.Damage, resolvedStats.CritChance, resolvedStats.CritDamage,
+            var totalDamage = CalculateScaledDamage(0, resolvedStats.Damage, resolvedStats.CritChance, resolvedStats.CritDamage,
                 weapon.PlayerDamageCoefficient, weapon.CritChanceCoefficient, weapon.CritDamageCoefficient);
 
             foreach (var enemyEntity in enemyEntities)

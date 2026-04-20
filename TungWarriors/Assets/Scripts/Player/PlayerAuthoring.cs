@@ -37,7 +37,7 @@ public class PlayerAuthoring : MonoBehaviour
             AddComponent<PlayerThinkingFlag>(entity);
             SetComponentEnabled<PlayerThinkingFlag>(entity, false);
 
-            AddComponent(entity, new PlayerAttackData()
+            AddComponent(entity, new PlasmaBlastWeaponData()
             {
                 AttackPrefab = GetEntity(authoring.AttackPrefab, TransformUsageFlags.Dynamic),
                 CooldownTime = authoring.CooldownTime,
@@ -45,7 +45,7 @@ public class PlayerAuthoring : MonoBehaviour
                 CollisionFilter = attackCollisionFilter
             });
 
-            AddComponent<PlayerCooldownExpirationTimestamp>(entity);
+            AddComponent<PlasmaBlastWeaponCooldown>(entity);
             AddComponent(entity, new GemsCollectedCount { Value = 0 });
             AddComponent<UpdateGemUIFlag>(entity);
             AddComponent(entity, new PlayerWorldUIPrefab()

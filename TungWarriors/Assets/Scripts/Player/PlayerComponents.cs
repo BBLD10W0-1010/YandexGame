@@ -1,6 +1,4 @@
 ﻿using Unity.Entities;
-using Unity.Mathematics;
-using Unity.Physics;
 
 public struct EquipmentStats : IComponentData
 {
@@ -37,16 +35,3 @@ public struct RevivePlayerCount : IComponentData
 }
 
 public struct PlayerTag : IComponentData { }
-
-public struct PlayerAttackData : IComponentData
-{
-    public Entity AttackPrefab;
-    public float CooldownTime;
-    public float3 DetectionSize;
-    public CollisionFilter CollisionFilter;
-}
-
-public struct PlayerCooldownExpirationTimestamp : IComponentData
-{
-    public double Value;
-}
