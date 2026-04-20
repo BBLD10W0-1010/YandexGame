@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.DeathConsequencesSystems;
+using System;
 using Unity.Entities;
 using UnityEngine;
 using YG; // PluginYG2 пространство имен
@@ -8,6 +9,8 @@ using YG; // PluginYG2 пространство имен
 public class RewardedAdvController : MonoBehaviour
 {
     public static RewardedAdvController Instance { get; private set; }
+
+    private Action currentErrorCallback;
 
     private void Awake()
     {
@@ -20,10 +23,19 @@ public class RewardedAdvController : MonoBehaviour
         
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        YG2.onErrorRewardedAdv += OnRewardedAdvError;
     }
 
-    public void ShowRewardedAdv(RewardedAdvAwards rewardId)
+    private void OnDestroy()
     {
+        YG2.onErrorRewardedAdv -= OnRewardedAdvError;
+    }
+
+    public void ShowRewardedAdv(RewardedAdvAwards rewardId, Action onSuccess = null, Action onError = null)
+    {
+        currentErrorCallback = onError;
+
         if (YG2.nowRewardAdv)
         {
             return;
@@ -64,7 +76,37 @@ public class RewardedAdvController : MonoBehaviour
                     GameUIController.Instance.SwitchDeathPanel();
                 });
                 break;
+            case(RewardedAdvAwards.chest):
+                YG2.RewardedAdvShow(rewardId.ToString(), () =>
+                {
+                    onSuccess?.Invoke();
+                });
+                break;
+            case (RewardedAdvAwards.gold):
+                YG2.RewardedAdvShow(rewardId.ToString(), () =>
+                {
+                    onSuccess?.Invoke();
+                });
+                break;
+            case (RewardedAdvAwards.gems):
+                YG2.RewardedAdvShow(rewardId.ToString(), () =>
+                {
+                    onSuccess?.Invoke();
+                });
+                break;
         }
         
+    }
+
+    private void OnRewardedAdvError()
+    {
+        currentErrorCallback?.Invoke();
+
+        ClearCurrentCallbacks();
+    }
+
+    private void ClearCurrentCallbacks()
+    {
+        currentErrorCallback = null;
     }
 }

@@ -4,7 +4,7 @@ using Unity.Transforms;
 using UnityEngine;
 using Unity.Physics;
 using Unity.Collections;
-
+using System.Linq;
 
 public partial class PlayerInputSystem : SystemBase
 {
@@ -94,5 +94,30 @@ public partial struct PlayerAttackSystem : ISystem
             }
             expirationTimestamp.ValueRW.Value = elapsedTime + attackData.CooldownTime;
         }
+    }
+}
+
+[UpdateInGroup(typeof(InitializationSystemGroup), OrderLast = true)]
+public partial struct ApplyEquipmentBuffsSystem : ISystem
+{
+    public void OnUpdate(ref SystemState systemState)
+    {
+        var world = World.DefaultGameObjectInjectionWorld;
+        if (world == null) return;
+
+        var playerQuery = world.EntityManager.CreateEntityQuery(typeof(PlayerTag));
+        if (playerQuery.IsEmpty) return;
+
+        var playerEntity = playerQuery.GetSingletonEntity();
+
+        foreach (var equipment in PlayerData.Instance.EquipmentOnPlayer.Values)
+        {
+            foreach (var buff in equipment.Buffs)
+            {
+                buff.Apply(playerEntity);
+            }
+        }
+        Debug.Log("Buffs Are Applying");
+        systemState.Enabled = false;
     }
 }

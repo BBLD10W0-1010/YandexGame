@@ -1,5 +1,7 @@
 ﻿public enum RewardedAdvAwards
 {
     extraLife,
-    coins
+    chest,
+    gold,
+    gems
 }
