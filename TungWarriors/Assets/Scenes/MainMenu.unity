@@ -6546,13 +6546,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cb1f753b84135742a5d7112884055dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items:
-  - {fileID: 11400000, guid: a2cc574078d6add46bf96d65b0fc38a7, type: 2}
-  - {fileID: 11400000, guid: 349fce8b8a068cf4795e0c26d05e90c6, type: 2}
-  - {fileID: 11400000, guid: 9104328ed2c1aa94383d55dd6c1427d2, type: 2}
-  - {fileID: 11400000, guid: c0db11007db19eb42a18d4233c6f7ee9, type: 2}
-  - {fileID: 11400000, guid: 89c431d434a47f44695d96d9d7f49973, type: 2}
-  - {fileID: 11400000, guid: bd45eadfa565b2848a840cd58d6c2787, type: 2}
   buyChestForGold: {fileID: 632136967}
   chestForGoldCost: 100
   buyChestForDiamond: {fileID: 682632893}
@@ -6956,13 +6949,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cb1f753b84135742a5d7112884055dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items:
-  - {fileID: 11400000, guid: a2cc574078d6add46bf96d65b0fc38a7, type: 2}
-  - {fileID: 11400000, guid: 349fce8b8a068cf4795e0c26d05e90c6, type: 2}
-  - {fileID: 11400000, guid: 9104328ed2c1aa94383d55dd6c1427d2, type: 2}
-  - {fileID: 11400000, guid: c0db11007db19eb42a18d4233c6f7ee9, type: 2}
-  - {fileID: 11400000, guid: 89c431d434a47f44695d96d9d7f49973, type: 2}
-  - {fileID: 11400000, guid: bd45eadfa565b2848a840cd58d6c2787, type: 2}
   buyChestForGold: {fileID: 1807903140}
   chestForGoldCost: 100
   buyChestForDiamond: {fileID: 1572115932}
@@ -14042,6 +14028,13 @@ MonoBehaviour:
   gold: 1000
   gems: 123
   rubies: 123
+  shopItems:
+  - {fileID: 11400000, guid: a2cc574078d6add46bf96d65b0fc38a7, type: 2}
+  - {fileID: 11400000, guid: 349fce8b8a068cf4795e0c26d05e90c6, type: 2}
+  - {fileID: 11400000, guid: 9104328ed2c1aa94383d55dd6c1427d2, type: 2}
+  - {fileID: 11400000, guid: c0db11007db19eb42a18d4233c6f7ee9, type: 2}
+  - {fileID: 11400000, guid: 89c431d434a47f44695d96d9d7f49973, type: 2}
+  - {fileID: 11400000, guid: bd45eadfa565b2848a840cd58d6c2787, type: 2}
 --- !u!4 &1584813346
 Transform:
   m_ObjectHideFlags: 0

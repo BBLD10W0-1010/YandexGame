@@ -11,6 +11,9 @@ public class PlayerData : MonoBehaviour
     [SerializeField] private int gems;
     [SerializeField] private int rubies;
 
+    [Header("Shop")]
+    [SerializeField] private List<ItemData> shopItems = new();
+
     [Header("Inventory")]
     [SerializeField] private List<Equipment> inventory = new();
 
@@ -43,6 +46,7 @@ public class PlayerData : MonoBehaviour
 
     public List<Equipment> Inventory => inventory;
     public Dictionary<EquipmentOnPlayerType, Equipment> EquipmentOnPlayer => equipmentOnPlayer;
+    public List<ItemData> ShopItems => shopItems;
 
     private void Awake()
     {

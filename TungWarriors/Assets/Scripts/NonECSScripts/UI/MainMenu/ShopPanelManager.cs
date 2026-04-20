@@ -10,8 +10,6 @@ using UnityEngine.UI;
 public class ShopPanelManager : MonoBehaviour 
 {
     [Header("Chests")]
-    [SerializeField] private List<ItemData> items;
-
     [SerializeField] private Button buyChestForGold;
     [SerializeField] private int chestForGoldCost;
 
@@ -57,7 +55,7 @@ public class ShopPanelManager : MonoBehaviour
 
     private void Awake()
     {
-        equipmentFactory = new(items);
+        equipmentFactory = new(PlayerData.Instance.ShopItems);
         messagePanel.SetActive(false);
     }
 
