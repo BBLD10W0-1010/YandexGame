@@ -52,7 +52,11 @@ public class PlayerAuthoring : MonoBehaviour
             {
                 Value = authoring.WorldUiPrefab
             });
-            AddComponent<EquipmentStats>(entity);
+            AddComponent(entity, new EquipmentStats());
+            AddComponent(entity, new PlayerBaseStats());
+            AddComponent(entity, new PlayerResolvedStats());
+            AddComponent<InitializePlayerStatsFlag>(entity);
+            SetComponentEnabled<InitializePlayerStatsFlag>(entity, true);
 
             Debug.Log("Player Creates");
         }
