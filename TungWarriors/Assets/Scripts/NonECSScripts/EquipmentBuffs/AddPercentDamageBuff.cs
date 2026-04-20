@@ -20,7 +20,7 @@ public class AddPercentDamageBuff : Buff
         if (world.EntityManager.HasComponent<EquipmentStats>(playerEntity))
         {
             var stats = world.EntityManager.GetComponentData<EquipmentStats>(playerEntity);
-            stats.Damage += stats.Damage * Value * 100;
+            stats.Damage += stats.Damage * Value;
             world.EntityManager.SetComponentData(playerEntity, stats);
         }
         else

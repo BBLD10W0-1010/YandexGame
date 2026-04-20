@@ -11,6 +11,25 @@ public struct EquipmentStats : IComponentData
     public float CritDamage;
 }
 
+public struct PlayerBaseStats : IComponentData
+{
+    public float MoveSpeed;
+    public int MaxHitPoints;
+}
+
+public struct PlayerResolvedStats : IComponentData
+{
+    public float Damage;
+    public float MoveSpeedBonus;
+    public int Defense;
+    public float HealthRegen;
+    public float CritChance;
+    public float CritDamage;
+    public int MaxHitPoints;
+}
+
+public struct InitializePlayerStatsFlag : IComponentData, IEnableableComponent { }
+
 public struct RevivePlayerCount : IComponentData
 {
     public int Value;

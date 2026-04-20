@@ -6,6 +6,54 @@ using Unity.Physics;
 using Unity.Collections;
 using System.Linq;
 
+public partial struct InitializePlayerStatsSystem : ISystem
+{
+    public void OnUpdate(ref SystemState state)
+    {
+        foreach (var (baseStats, resolvedStats, maxHp, moveSpeed, initFlag) in
+                 SystemAPI.Query<RefRW<PlayerBaseStats>, RefRW<PlayerResolvedStats>, RefRW<CharacterMaxHitPoints>, CharacterMoveSpeed, EnabledRefRW<InitializePlayerStatsFlag>>()
+                     .WithAll<PlayerTag>())
+        {
+            baseStats.ValueRW.MoveSpeed = moveSpeed.Value;
+            baseStats.ValueRW.MaxHitPoints = maxHp.ValueRO.Value;
+            resolvedStats.ValueRW.MaxHitPoints = maxHp.ValueRO.Value;
+            initFlag.ValueRW = false;
+        }
+    }
+}
+
+[UpdateInGroup(typeof(InitializationSystemGroup))]
+public partial struct ResolvePlayerStatsSystem : ISystem
+{
+    public void OnUpdate(ref SystemState state)
+    {
+        foreach (var (baseStats, equipmentStats, damageBonus, speedBonus, defense, regen, resolvedStats, maxHp, currentHp) in
+                 SystemAPI.Query<PlayerBaseStats, EquipmentStats, RefRW<PlayerDamageBonus>, RefRW<CharacterMoveSpeedBonus>,
+                         RefRW<CharacterDefense>, RefRW<CharacterHealthRegen>, RefRW<PlayerResolvedStats>, RefRW<CharacterMaxHitPoints>, RefRW<CharacterCurrentHitPoints>>()
+                     .WithAll<PlayerTag>())
+        {
+            var targetMaxHp = math.max(1, (int)math.round(baseStats.MaxHitPoints + equipmentStats.Health));
+            var maxHpDiff = targetMaxHp - maxHp.ValueRO.Value;
+
+            resolvedStats.ValueRW = new PlayerResolvedStats
+            {
+                Damage = damageBonus.ValueRO.Value + equipmentStats.Damage,
+                MoveSpeedBonus = speedBonus.ValueRO.Value + equipmentStats.Speed,
+                Defense = (int)math.round(defense.ValueRO.Value),
+                HealthRegen = regen.ValueRO.ValuePerSecond,
+                CritChance = equipmentStats.CritChance,
+                CritDamage = equipmentStats.CritDamage,
+                MaxHitPoints = targetMaxHp
+            };
+
+            maxHp.ValueRW.Value = targetMaxHp;
+            if (maxHpDiff > 0)
+                currentHp.ValueRW.Value += maxHpDiff;
+            currentHp.ValueRW.Value = math.min(currentHp.ValueRO.Value, targetMaxHp);
+        }
+    }
+}
+
 public partial class PlayerInputSystem : SystemBase
 {
     private SurvivorsInput _inputActions;
@@ -81,19 +129,26 @@ public partial struct PlayerAttackSystem : ISystem
             var spawnOrientation = quaternion.Euler(0f, 0f, angleToClosestEnemy);
             var newAttack = ecb.Instantiate(attackData.AttackPrefab);
             ecb.SetComponent(newAttack, LocalTransform.FromPositionRotation(spawnPosition, spawnOrientation));
-            expirationTimestamp.ValueRW.Value = elapsedTime + attackData.CooldownTime;
-            if (SystemAPI.HasComponent<PlayerDamageBonus>(entity))
+
+            if (SystemAPI.HasComponent<PlayerResolvedStats>(entity))
             {
-                var bonus = SystemAPI.GetComponent<PlayerDamageBonus>(entity).Value;
-                if (bonus > 0)
-                {
-                    var projectileData = SystemAPI.GetComponent<PlasmaBlastData>(attackData.AttackPrefab);
-                    projectileData.AttackDamage += bonus;
-                    ecb.SetComponent(newAttack, projectileData);
-                }
+                var stats = SystemAPI.GetComponent<PlayerResolvedStats>(entity);
+                var projectileData = SystemAPI.GetComponent<PlasmaBlastData>(attackData.AttackPrefab);
+                projectileData.AttackDamage = CalculateScaledDamage(projectileData.AttackDamage, stats.Damage, stats.CritChance, stats.CritDamage,
+                    projectileData.PlayerDamageCoefficient, projectileData.CritChanceCoefficient, projectileData.CritDamageCoefficient);
+                projectileData.MoveSpeed += stats.MoveSpeedBonus * projectileData.PlayerMoveSpeedCoefficient;
+                ecb.SetComponent(newAttack, projectileData);
             }
             expirationTimestamp.ValueRW.Value = elapsedTime + attackData.CooldownTime;
         }
+    }
+
+    private static int CalculateScaledDamage(int baseDamage, float playerDamage, float critChance, float critDamage, float damageCoef, float critChanceCoef, float critDamageCoef)
+    {
+        var damageWithStats = baseDamage + playerDamage * damageCoef;
+        var normalizedCritChance = math.max(0f, critChance * critChanceCoef) / 100f;
+        var critMultiplier = 1f + normalizedCritChance * (math.max(0f, critDamage * critDamageCoef) / 100f);
+        return math.max(1, (int)math.round(damageWithStats * critMultiplier));
     }
 }
 
