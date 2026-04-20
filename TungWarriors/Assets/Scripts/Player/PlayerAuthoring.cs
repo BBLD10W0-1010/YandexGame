@@ -33,8 +33,10 @@ public class PlayerAuthoring : MonoBehaviour
                 Value = 1,
                 IsAdvUsed = false
             });
+
             AddComponent<PlayerThinkingFlag>(entity);
             SetComponentEnabled<PlayerThinkingFlag>(entity, false);
+
             AddComponent(entity, new PlayerAttackData()
             {
                 AttackPrefab = GetEntity(authoring.AttackPrefab, TransformUsageFlags.Dynamic),
@@ -42,6 +44,7 @@ public class PlayerAuthoring : MonoBehaviour
                 DetectionSize = new float3(authoring.DetectionSize),
                 CollisionFilter = attackCollisionFilter
             });
+
             AddComponent<PlayerCooldownExpirationTimestamp>(entity);
             AddComponent(entity, new GemsCollectedCount { Value = 0 });
             AddComponent<UpdateGemUIFlag>(entity);
@@ -49,7 +52,9 @@ public class PlayerAuthoring : MonoBehaviour
             {
                 Value = authoring.WorldUiPrefab
             });
+            AddComponent<EquipmentStats>(entity);
 
+            Debug.Log("Player Creates");
         }
     }
 }
