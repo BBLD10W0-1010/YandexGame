@@ -27,11 +27,20 @@ public partial struct ResolvePlayerStatsSystem : ISystem
 {
     public void OnUpdate(ref SystemState state)
     {
-        foreach (var (baseStats, equipmentStats, damageBonus, speedBonus, defense, regen, resolvedStats, maxHp, currentHp) in
-                 SystemAPI.Query<PlayerBaseStats, EquipmentStats, RefRW<PlayerDamageBonus>, RefRW<CharacterMoveSpeedBonus>,
-                         RefRW<CharacterDefense>, RefRW<CharacterHealthRegen>, RefRW<PlayerResolvedStats>, RefRW<CharacterMaxHitPoints>, RefRW<CharacterCurrentHitPoints>>()
-                     .WithAll<PlayerTag>())
+        foreach (var (baseStats, equipmentStats, resolvedStats, entity) in
+                 SystemAPI.Query<PlayerBaseStats, EquipmentStats, RefRW<PlayerResolvedStats>>()
+                     .WithAll<PlayerTag, PlayerDamageBonus, CharacterMoveSpeedBonus>()
+                     .WithAll<CharacterDefense, CharacterHealthRegen, CharacterMaxHitPoints>()
+                     .WithAll<CharacterCurrentHitPoints>()
+                     .WithEntityAccess())
         {
+            var damageBonus = SystemAPI.GetComponentRW<PlayerDamageBonus>(entity);
+            var speedBonus = SystemAPI.GetComponentRW<CharacterMoveSpeedBonus>(entity);
+            var defense = SystemAPI.GetComponentRW<CharacterDefense>(entity);
+            var regen = SystemAPI.GetComponentRW<CharacterHealthRegen>(entity);
+            var maxHp = SystemAPI.GetComponentRW<CharacterMaxHitPoints>(entity);
+            var currentHp = SystemAPI.GetComponentRW<CharacterCurrentHitPoints>(entity);
+
             var targetMaxHp = math.max(1, (int)math.round(baseStats.MaxHitPoints + equipmentStats.Health));
             var maxHpDiff = targetMaxHp - maxHp.ValueRO.Value;
 
