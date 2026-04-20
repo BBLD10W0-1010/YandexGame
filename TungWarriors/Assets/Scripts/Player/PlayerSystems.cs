@@ -100,7 +100,7 @@ public partial struct PlayerAttackSystem : ISystem
         var entityCommandBufferSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
         var ecb = entityCommandBufferSystem.CreateCommandBuffer(systemState.WorldUnmanaged);
         var physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
-        foreach (var (expirationTimestamp, attackData, transform, entity) in SystemAPI.Query<RefRW<PlayerCooldownExpirationTimestamp>, PlayerAttackData, LocalTransform>()
+        foreach (var (expirationTimestamp, attackData, transform, entity) in SystemAPI.Query<RefRW<PlasmaBlastWeaponCooldown>, PlasmaBlastWeaponData, LocalTransform>()
             .WithEntityAccess())
         {
             if (expirationTimestamp.ValueRO.Value > elapsedTime) continue;
