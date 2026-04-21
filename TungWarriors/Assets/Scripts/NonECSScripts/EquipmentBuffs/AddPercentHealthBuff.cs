@@ -20,7 +20,7 @@ public class AddPercentHealthBuff : Buff
         if (world.EntityManager.HasComponent<EquipmentStats>(playerEntity))
         {
             var stats = world.EntityManager.GetComponentData<EquipmentStats>(playerEntity);
-            stats.Health += stats.Health * Value * 100;
+            stats.Health += stats.Health * Value;
             world.EntityManager.SetComponentData(playerEntity, stats);
         }
         else
