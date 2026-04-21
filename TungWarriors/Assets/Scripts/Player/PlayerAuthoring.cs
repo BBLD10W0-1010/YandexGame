@@ -55,6 +55,7 @@ public class PlayerAuthoring : MonoBehaviour
             AddComponent(entity, new EquipmentStats());
             AddComponent(entity, new PlayerBaseStats());
             AddComponent(entity, new PlayerResolvedStats());
+            AddBuffer<PlayerStatModifier>(entity);
             AddComponent<InitializePlayerStatsFlag>(entity);
             SetComponentEnabled<InitializePlayerStatsFlag>(entity, true);
 
