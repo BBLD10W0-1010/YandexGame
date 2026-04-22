@@ -58,6 +58,7 @@ public class PlayerAuthoring : MonoBehaviour
             AddBuffer<PlayerStatModifier>(entity);
             AddComponent<InitializePlayerStatsFlag>(entity);
             SetComponentEnabled<InitializePlayerStatsFlag>(entity, true);
+            AddComponent(entity, new PlayerStatsResolvedAfterMainMenu { HasResolved = false });
 
             Debug.Log("Player Creates");
         }

@@ -17,6 +17,11 @@ public struct PlayerBaseStats : IComponentData
     public float MaxHitPoints;
 }
 
+public struct PlayerStatsResolvedAfterMainMenu : IComponentData
+{
+    public bool HasResolved;
+}
+
 public struct PlayerResolvedStats : IComponentData
 {
     public float Damage;

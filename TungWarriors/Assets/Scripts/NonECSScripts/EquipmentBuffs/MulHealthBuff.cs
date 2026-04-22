@@ -6,9 +6,9 @@ public class MulHealthBuff : Buff
 {
     public override EquipmentType[] Type => new EquipmentType[] { EquipmentType.Accessory, EquipmentType.Armor };
 
-    public override float MinValue => 0;
+    public override float MinValue => 1;
 
-    public override float MaxValue => 2;
+    public override float MaxValue => 1000;
 
     public override string Description => $"Health *{Math.Abs(Value * 100)}";
 
@@ -23,7 +23,7 @@ public class MulHealthBuff : Buff
             var stats = world.EntityManager.GetComponentData<EquipmentStats>(playerEntity);
             stats.HealthValueMultiplicator = (1 + Value);
             world.EntityManager.SetComponentData(playerEntity, stats);
-            Debug.Log($"Applied {Description} to player. New MaxHitPoints: {stats.Health * stats.HealthValueMultiplicator} MULTIPLICATOR");
+            Debug.Log($"Applied {Description} to player. MULTIPLICATOR");
             //var stats = world.EntityManager.GetComponentData<EquipmentStats>(playerEntity);
             //stats.Health += stats.Health * Value;
             //world.EntityManager.SetComponentData(playerEntity, stats);

@@ -21,7 +21,7 @@ public class AddPercentHealthBuff : Buff
         {
 
                 var stats = world.EntityManager.GetComponentData<EquipmentStats>(playerEntity);
-                stats.HealthPercentageMultiplicator = (1 + Value/100);
+                stats.HealthPercentageMultiplicator = (1 + Value);
                 world.EntityManager.SetComponentData(playerEntity, stats);
                 Debug.Log($"Applied {Description} to player. New MaxHitPoints: {stats.Health * stats.HealthPercentageMultiplicator} PERCENTAGE");
             //var stats = world.EntityManager.GetComponentData<EquipmentStats>(playerEntity);
