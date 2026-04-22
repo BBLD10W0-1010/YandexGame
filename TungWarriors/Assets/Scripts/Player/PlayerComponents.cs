@@ -7,12 +7,17 @@ public struct EquipmentStats : IComponentData
     public float Health;
     public float CritChance;
     public float CritDamage;
+
     public float HealthValueMultiplicator;
     public float HealthPercentageMultiplicator;
+
+    public float DamageValueMultiplicator;
+    public float DamagePercentageMultiplicator;
 }
 
 public struct PlayerBaseStats : IComponentData
 {
+    public float Damage; 
     public float MoveSpeed;
     public float MaxHitPoints;
 }

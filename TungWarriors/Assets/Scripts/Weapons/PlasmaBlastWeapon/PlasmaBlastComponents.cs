@@ -10,6 +10,7 @@ public struct PlasmaBlastData : IComponentData
     public float PlayerMoveSpeedCoefficient;
     public float CritChanceCoefficient;
     public float CritDamageCoefficient;
+    public Entity Owner;
 }
 
 public struct PlasmaBlastWeaponData : IComponentData

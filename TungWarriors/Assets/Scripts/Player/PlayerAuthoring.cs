@@ -10,6 +10,9 @@ public class PlayerAuthoring : MonoBehaviour
     public float CooldownTime;
     public float DetectionSize;
     public GameObject WorldUiPrefab;
+    public float BaseDamage;
+    public float BaseMoveSpeed;
+    public float BaseHealth;
     private class Baker : Baker<PlayerAuthoring>
     {
         public override void Bake(PlayerAuthoring authoring)
@@ -53,12 +56,16 @@ public class PlayerAuthoring : MonoBehaviour
                 Value = authoring.WorldUiPrefab
             });
             AddComponent(entity, new EquipmentStats());
-            AddComponent(entity, new PlayerBaseStats());
             AddComponent(entity, new PlayerResolvedStats());
             AddBuffer<PlayerStatModifier>(entity);
             AddComponent<InitializePlayerStatsFlag>(entity);
             SetComponentEnabled<InitializePlayerStatsFlag>(entity, true);
             AddComponent(entity, new PlayerStatsResolvedAfterMainMenu { HasResolved = false });
+            AddComponent(entity, new PlayerBaseStats { 
+                Damage = authoring.BaseDamage, 
+                MoveSpeed = authoring.BaseMoveSpeed, 
+                MaxHitPoints = authoring.BaseHealth 
+            });
 
             Debug.Log("Player Creates");
         }

@@ -37,8 +37,16 @@ public partial struct ResolvePlayerStatsSystem : ISystem
                      .WithEntityAccess())
         {
             var playerMaxHP = SystemAPI.GetComponentRW<CharacterMaxHitPoints>(entity);
+            var playerCurrentHP = SystemAPI.GetComponentRW<CharacterCurrentHitPoints>(entity);
+            
             playerMaxHP.ValueRW.Value = (baseStats.MaxHitPoints + equipmentStats.Health) * (equipmentStats.HealthPercentageMultiplicator+1) * (equipmentStats.HealthValueMultiplicator+1);
-            Debug.Log($"base stat: {baseStats.MaxHitPoints}, equip flat: {equipmentStats.Health}, equip %: {equipmentStats.HealthPercentageMultiplicator}, equip value mul: {equipmentStats.HealthValueMultiplicator}, final max HP: {playerMaxHP.ValueRO.Value}");
+            playerCurrentHP.ValueRW.Value = playerMaxHP.ValueRO.Value;
+
+            resolvedStats.ValueRW.Damage = (baseStats.Damage + equipmentStats.Damage) * (equipmentStats.DamageValueMultiplicator+1) * (equipmentStats.DamagePercentageMultiplicator+1);
+
+
+            //Debug.Log($"base stat: {baseStats.MaxHitPoints}, equip flat: {equipmentStats.Health}, equip %: {equipmentStats.HealthPercentageMultiplicator}, equip value mul: {equipmentStats.HealthValueMultiplicator}, final max HP: {playerMaxHP.ValueRO.Value}");
+
             Debug.Log(entity.Index);
         }
     }
@@ -119,15 +127,16 @@ public partial struct ResolvePlayerStatsSystem : ISystem
                 var newAttack = ecb.Instantiate(attackData.AttackPrefab);
                 ecb.SetComponent(newAttack, LocalTransform.FromPositionRotation(spawnPosition, spawnOrientation));
 
+                var projectileData = SystemAPI.GetComponent<PlasmaBlastData>(attackData.AttackPrefab);
+                projectileData.Owner = entity;
+
                 if (SystemAPI.HasComponent<PlayerResolvedStats>(entity))
                 {
                     var stats = SystemAPI.GetComponent<PlayerResolvedStats>(entity);
-                    var projectileData = SystemAPI.GetComponent<PlasmaBlastData>(attackData.AttackPrefab);
-                    projectileData.AttackDamage = CalculateScaledDamage(projectileData.AttackDamage, stats.Damage, stats.CritChance, stats.CritDamage,
-                        projectileData.PlayerDamageCoefficient, projectileData.CritChanceCoefficient, projectileData.CritDamageCoefficient);
                     projectileData.MoveSpeed += stats.MoveSpeedBonus * projectileData.PlayerMoveSpeedCoefficient;
-                    ecb.SetComponent(newAttack, projectileData);
                 }
+
+                ecb.SetComponent(newAttack, projectileData);
                 expirationTimestamp.ValueRW.Value = elapsedTime + attackData.CooldownTime;
             }
         }
@@ -169,7 +178,7 @@ public partial struct ResolvePlayerStatsSystem : ISystem
             }
             else
             {
-                
+                //елсе нахуй так-то тут не нужен, и без него работает =))))))) Че то я здесь хотел умное высрать
             }
         }
     }

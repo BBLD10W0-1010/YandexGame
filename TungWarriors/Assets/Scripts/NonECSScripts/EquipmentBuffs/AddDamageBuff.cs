@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class AddDamageBuff : Buff
 {
-    public override float MinValue => -50;
+    public override float MinValue => 0;
 
     public override float MaxValue => 50;
 
