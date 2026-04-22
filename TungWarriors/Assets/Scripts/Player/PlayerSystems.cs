@@ -38,11 +38,63 @@ public partial struct ResolvePlayerStatsSystem : ISystem
         {
             var playerMaxHP = SystemAPI.GetComponentRW<CharacterMaxHitPoints>(entity);
             var playerCurrentHP = SystemAPI.GetComponentRW<CharacterCurrentHitPoints>(entity);
+            var playerDamageBonus = SystemAPI.GetComponentRW<PlayerDamageBonus>(entity);
+            var playerMoveSpeedBonus = SystemAPI.GetComponentRW<CharacterMoveSpeedBonus>(entity);
+            var playerDefense = SystemAPI.GetComponentRW<CharacterDefense>(entity);
+            var playerHealthRegen = SystemAPI.GetComponentRW<CharacterHealthRegen>(entity);
+
+            float damageAdd = 0f;
+            float moveSpeedAdd = 0f;
+            float defenseAdd = 0f;
+            float healthRegenAdd = 0f;
+            float critChanceAdd = 0f;
+            float critDamageAdd = 0f;
+            float maxHitPointsAdd = 0f;
+
+            for (int i = 0; i < statModifiers.Length; i++)
+            {
+                var modifier = statModifiers[i];
+                switch (modifier.Type)
+                {
+                    case PlayerStatType.Damage:
+                        damageAdd += modifier.AddValue;
+                        break;
+                    case PlayerStatType.MoveSpeedBonus:
+                        moveSpeedAdd += modifier.AddValue;
+                        break;
+                    case PlayerStatType.Defense:
+                        defenseAdd += modifier.AddValue;
+                        break;
+                    case PlayerStatType.HealthRegen:
+                        healthRegenAdd += modifier.AddValue;
+                        break;
+                    case PlayerStatType.CritChance:
+                        critChanceAdd += modifier.AddValue;
+                        break;
+                    case PlayerStatType.CritDamage:
+                        critDamageAdd += modifier.AddValue;
+                        break;
+                    case PlayerStatType.MaxHitPoints:
+                        maxHitPointsAdd += modifier.AddValue;
+                        break;
+                }
+            }
             
-            playerMaxHP.ValueRW.Value = (baseStats.MaxHitPoints + equipmentStats.Health) * (equipmentStats.HealthPercentageMultiplicator+1) * (equipmentStats.HealthValueMultiplicator+1);
+            playerMaxHP.ValueRW.Value = (baseStats.MaxHitPoints + equipmentStats.Health + maxHitPointsAdd) * (equipmentStats.HealthPercentageMultiplicator+1) * (equipmentStats.HealthValueMultiplicator+1);
             playerCurrentHP.ValueRW.Value = playerMaxHP.ValueRO.Value;
 
-            resolvedStats.ValueRW.Damage = (baseStats.Damage + equipmentStats.Damage) * (equipmentStats.DamageValueMultiplicator+1) * (equipmentStats.DamagePercentageMultiplicator+1);
+            resolvedStats.ValueRW.Damage = (baseStats.Damage + equipmentStats.Damage + damageAdd) * (equipmentStats.DamageValueMultiplicator+1) * (equipmentStats.DamagePercentageMultiplicator+1);
+            resolvedStats.ValueRW.MoveSpeedBonus = equipmentStats.Speed + moveSpeedAdd;
+            resolvedStats.ValueRW.Defense = (int)math.max(0f, defenseAdd);
+            resolvedStats.ValueRW.HealthRegen = math.max(0f, healthRegenAdd);
+            resolvedStats.ValueRW.CritChance = math.max(0f, critChanceAdd);
+            resolvedStats.ValueRW.CritDamage = math.max(0f, critDamageAdd);
+            resolvedStats.ValueRW.MaxHitPoints = playerMaxHP.ValueRO.Value;
+
+            playerDamageBonus.ValueRW.Value = (int)math.max(0f, damageAdd);
+            playerMoveSpeedBonus.ValueRW.Value = resolvedStats.ValueRO.MoveSpeedBonus;
+            playerDefense.ValueRW.Value = resolvedStats.ValueRO.Defense;
+            playerHealthRegen.ValueRW.ValuePerSecond = resolvedStats.ValueRO.HealthRegen;
 
 
             //Debug.Log($"base stat: {baseStats.MaxHitPoints}, equip flat: {equipmentStats.Health}, equip %: {equipmentStats.HealthPercentageMultiplicator}, equip value mul: {equipmentStats.HealthValueMultiplicator}, final max HP: {playerMaxHP.ValueRO.Value}");

@@ -68,32 +68,29 @@ public partial struct ApplySelectedLevelUpCardSystem : ISystem
 
     private static void ApplyCardEffects(EntityManager em, Entity player, Entity card)
     {
+        if (!em.HasBuffer<PlayerStatModifier>(player))
+            return;
+
+        var statModifiers = em.GetBuffer<PlayerStatModifier>(player);
+
         if (em.HasComponent<CardDamageBonusEffect>(card))
         {
-            var bonus = em.GetComponentData<PlayerDamageBonus>(player);
-            bonus.Value += em.GetComponentData<CardDamageBonusEffect>(card).Value;
-            em.SetComponentData(player, bonus);
+            AddModifier(statModifiers, PlayerStatType.Damage, em.GetComponentData<CardDamageBonusEffect>(card).Value, 0f);
         }
 
         if (em.HasComponent<CardDefenseBonusEffect>(card))
         {
-            var defense = em.GetComponentData<CharacterDefense>(player);
-            defense.Value += em.GetComponentData<CardDefenseBonusEffect>(card).Value;
-            em.SetComponentData(player, defense);
+            AddModifier(statModifiers, PlayerStatType.Defense, em.GetComponentData<CardDefenseBonusEffect>(card).Value, 0f);
         }
 
         if (em.HasComponent<CardHealthRegenEffect>(card))
         {
-            var regen = em.GetComponentData<CharacterHealthRegen>(player);
-            regen.ValuePerSecond += em.GetComponentData<CardHealthRegenEffect>(card).ValuePerSecond;
-            em.SetComponentData(player, regen);
+            AddModifier(statModifiers, PlayerStatType.HealthRegen, em.GetComponentData<CardHealthRegenEffect>(card).ValuePerSecond, 0f);
         }
 
         if (em.HasComponent<CardMoveSpeedBonusEffect>(card))
         {
-            var speedBonus = em.GetComponentData<CharacterMoveSpeedBonus>(player);
-            speedBonus.Value += em.GetComponentData<CardMoveSpeedBonusEffect>(card).Value;
-            em.SetComponentData(player, speedBonus);
+            AddModifier(statModifiers, PlayerStatType.MoveSpeedBonus, em.GetComponentData<CardMoveSpeedBonusEffect>(card).Value, 0f);
         }
 
         if (em.HasComponent<CardUnlockBatWeaponEffect>(card) && !em.HasComponent<BatWeaponData>(player))
@@ -107,5 +104,15 @@ public partial struct ApplySelectedLevelUpCardSystem : ISystem
 
             Debug.Log("Bat weapon unlocked");
         }
+    }
+
+    private static void AddModifier(DynamicBuffer<PlayerStatModifier> statModifiers, PlayerStatType type, float addValue, float mulValue)
+    {
+        statModifiers.Add(new PlayerStatModifier
+        {
+            Type = type,
+            AddValue = addValue,
+            MulValue = mulValue
+        });
     }
 }
