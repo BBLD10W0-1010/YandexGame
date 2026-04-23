@@ -24,6 +24,7 @@ public class AddDamageBuff : Buff
         if (world.EntityManager.HasComponent<EquipmentStats>(playerEntity))
         {
             var stats = world.EntityManager.GetComponentData<EquipmentStats>(playerEntity);
+            Debug.Log($"damage buff plus {Value}");
             stats.Damage += Value;
             world.EntityManager.SetComponentData(playerEntity, stats);
         }

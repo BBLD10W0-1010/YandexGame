@@ -221,6 +221,7 @@ public partial struct ResolvePlayerStatsSystem : ISystem
                 {
                     foreach (var buff in equipment.Buffs)
                     {
+                        Debug.Log(buff.Value.ToString() + "BLYAT ITS HERE");
                         buff.Apply(playerEntity);
                     }
                 }

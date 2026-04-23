@@ -437,7 +437,7 @@ MonoBehaviour:
   CooldownTime: 1
   DetectionSize: 10
   WorldUiPrefab: {fileID: 6848332979229617546, guid: 1b8519ce5d7dc6e48bb4d207983180ca, type: 3}
-  BaseDamage: 2
+  BaseDamage: 3
   BaseMoveSpeed: 2
   BaseHealth: 100
 --- !u!114 &1158497032
